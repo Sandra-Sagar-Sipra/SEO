@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:deploy-preview-3--aiquire.netlify.app)",
+      "WebFetch(domain:www.bensbites.com)"
+    ]
+  }
+}

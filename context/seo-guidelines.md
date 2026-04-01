@@ -1,6 +1,6 @@
-# SEO Guidelines for Castos Content
+# SEO Guidelines for Aiquire Content
 
-This document outlines SEO best practices and requirements for all Castos blog content to maximize organic search visibility and rankings.
+This document outlines SEO best practices and requirements for all Aiquire blog content to maximise organic search visibility and rankings.
 
 ## Content Length Requirements
 
@@ -20,7 +20,7 @@ This document outlines SEO best practices and requirements for all Castos blog c
 - Longer content typically ranks higher in search results
 - More words = more opportunities for keyword integration and topic coverage
 - Comprehensive content earns more backlinks and engagement
-- Depth signals expertise and authority to search engines
+- Depth signals expertise and authority to search engines — critical for YMYL (Your Money Your Life) topics like AI consulting
 
 ### Quality Over Quantity
 - Don't add fluff just to hit word counts
@@ -58,16 +58,16 @@ Primary keyword MUST appear in:
 ### Keyword Integration Best Practices
 - **Natural language first**: Write for humans, optimize for search engines
 - **Use variations**: Don't repeat exact phrase robotically
-  - Example: "podcast hosting" → "hosting your podcast" → "podcast host"
+  - Example: "AI consulting" → "AI consulting services" → "AI consultant"
 - **Question formats**: Include conversational variations
-  - "How to start a podcast" vs "starting a podcast"
+  - "How to choose an AI consulting firm" vs "choosing an AI consultant"
 - **Semantic keywords**: Use related terms to support topical authority
-  - For "podcast editing": include "audio editing", "post-production", "editing workflow"
+  - For "MLOps": include "model monitoring", "drift detection", "ML deployment", "CI/CD for ML"
 
 ### Keyword Stuffing (Avoid)
-❌ "Podcast hosting is important. Podcast hosting helps podcasters. Our podcast hosting platform offers podcast hosting services for podcast hosting needs."
+❌ "AI consulting is important. AI consulting helps businesses. Our AI consulting services offer AI consulting for AI consulting needs."
 
-✅ "Podcast hosting is important for creators who want to distribute their show to major platforms. A reliable host ensures your episodes are accessible wherever listeners discover new content."
+✅ "AI consulting helps businesses identify where machine learning creates real ROI — before committing budget to building the wrong thing. The right AI consultant shortens the path from idea to production system."
 
 ## Content Structure Requirements
 
@@ -136,7 +136,7 @@ Primary keyword MUST appear in:
 
 ### Meta Title
 **Requirements**:
-- **Length**: 50-60 characters (including "| Castos" if used)
+- **Length**: 50-60 characters (including "| Aiquire" if used)
 - **Primary keyword**: Must be included
 - **Compelling**: Should encourage clicks from SERP
 - **Unique**: Different from all other Castos page titles
@@ -149,10 +149,11 @@ Primary keyword MUST appear in:
 - `[Topic] Guide for [Audience] | Castos`
 
 **Examples**:
-- ✅ "How to Start a Podcast in 2025: Complete Guide"
-- ✅ "12 Proven Podcast Growth Strategies | Castos"
-- ❌ "Podcast Tips and Tricks" (too vague, no keyword)
-- ❌ "The Ultimate Comprehensive Guide to Everything About Starting Your First Podcast Successfully" (too long)
+- ✅ "Why AI projects fail (and how to avoid it)"
+- ✅ "MLOps explained: keeping AI alive in production"
+- ✅ "AI consulting services: what to look for | Aiquire"
+- ❌ "AI Tips and Tricks" (too vague, no keyword)
+- ❌ "The Ultimate Comprehensive Guide to Everything About Choosing an AI Consulting Firm in 2026" (too long)
 
 ### Meta Description
 **Requirements**:
@@ -169,9 +170,9 @@ Primary keyword MUST appear in:
 ```
 
 **Examples**:
-- ✅ "Learn how to start a podcast with our step-by-step guide. Everything from equipment to launch strategy. Perfect for beginners. Start your show today." (159 chars)
-- ✅ "Discover 12 proven podcast growth strategies that top creators use. Increase downloads, engagement, and audience loyalty. Actionable tips inside." (155 chars)
-- ❌ "This is a blog post about podcasting where we discuss many podcast-related topics." (vague, no value prop, no CTA)
+- ✅ "85% of AI projects fail before production. Learn the real reasons — and how to structure your initiative to succeed. Book a free discovery call." (145 chars)
+- ✅ "What is MLOps and why does it matter? Plain-English guide to keeping ML models performing in production, from CI/CD to drift detection." (136 chars)
+- ❌ "This blog post discusses AI consulting and related topics for businesses." (vague, no value prop, no CTA)
 
 ### URL Slug
 **Requirements**:
@@ -184,10 +185,11 @@ Primary keyword MUST appear in:
 **Format**: `/blog/[primary-keyword-phrase]`
 
 **Examples**:
-- ✅ `/blog/start-podcast-guide`
-- ✅ `/blog/podcast-growth-strategies`
-- ✅ `/blog/podcast-editing-software`
-- ❌ `/blog/how-to-start-a-podcast-in-2025-the-complete-guide` (too long)
+- ✅ `/blog/why-ai-projects-fail`
+- ✅ `/blog/what-is-mlops`
+- ✅ `/blog/generative-ai-for-enterprise`
+- ✅ `/blog/ai-consulting-services-guide`
+- ❌ `/blog/a-comprehensive-guide-to-understanding-ai-consulting-in-2026` (too long)
 - ❌ `/blog/post-12345` (no keywords)
 
 ## Internal Linking Strategy
@@ -234,7 +236,7 @@ Primary keyword MUST appear in:
 - Distributed throughout article, not clustered
 
 **Reference**:
-- Always check @context/internal-links-map.md for priority linking targets
+- Always check `@context/internal-links-map.md` for Aiquire's priority linking targets (service pages, case studies, blog posts)
 - Ensure links are current and functional
 - Link to most relevant, up-to-date content
 
@@ -253,9 +255,10 @@ Primary keyword MUST appear in:
 
 ### External Link Quality Standards
 - **Authority**: Link to credible, well-known sources
-  - ✅ Industry publications (Podcast Host, Podnews, etc.)
-  - ✅ Research institutions and studies
-  - ✅ Established media outlets
+  - ✅ Industry publications (McKinsey Insights, MIT Sloan Review, Harvard Business Review, Gartner, Forrester)
+  - ✅ Research institutions (MIT, Stanford AI Lab, Oxford Internet Institute)
+  - ✅ Established tech media (TechCrunch, VentureBeat, Wired, The Verge for AI)
+  - ✅ Academic papers (arXiv, peer-reviewed journals)
   - ❌ Random blogs with no authority
   - ❌ Spammy or low-quality sites
 
@@ -307,36 +310,36 @@ Use transition words to improve flow (target: one per paragraph):
 ### Expertise, Authoritativeness, Trustworthiness (E-A-T)
 
 #### Expertise
-- Provide accurate, detailed information on podcasting topics
-- Back claims with data and examples
-- Demonstrate deep understanding of podcast creator needs
-- Include actionable, practical advice
+- Provide accurate, detailed information on AI consulting and engineering topics
+- Back claims with data, case studies, and real production experience
+- Demonstrate deep understanding of business leader and technical leader needs
+- Include actionable, practical advice — not just theory
 
 #### Authoritativeness
-- Cite credible sources
-- Reference industry data and trends
-- Include expert quotes when relevant
-- Leverage Castos's position as hosting platform
+- Cite credible sources (McKinsey, Gartner, MIT, peer-reviewed research)
+- Reference Aiquire's own track record: 40+ production systems, 3.2x ROI, 92% retention
+- Include client quotes and case study results where relevant
+- Leverage Aiquire's position as a strategy + engineering firm (not just one or the other)
 
 #### Trustworthiness
-- Be transparent and honest
-- Acknowledge limitations or challenges
-- Don't overpromise results
+- Be transparent and honest — including when AI is NOT the right answer
+- Acknowledge limitations and failure modes (this builds more trust than pretending AI always works)
+- Don't overpromise — no "AI will 10x your business" claims without evidence
 - Cite sources for all statistics and claims
-- Update outdated content regularly
+- Update outdated content regularly — AI moves fast
 
 ### Content Originality
-- **Never plagiarize**: All content must be original
-- **Add unique value**: What perspective or insight do we add?
-- **Fresh examples**: Use current, relevant examples
-- **Updated data**: Use most recent statistics available
-- **Unique angle**: Differentiate from competitor content
+- **Never plagiarise**: All content must be original
+- **Add unique value**: What practitioner perspective does Aiquire add that McKinsey or Accenture can't?
+- **Fresh examples**: Use recent case studies and current examples
+- **Updated data**: AI stats age quickly — verify recency of all figures
+- **Unique angle**: The "strategy + engineering combined" and "pilot to production" angles are Aiquire's content moat
 
 ### Factual Accuracy
-- **Verify statistics**: Check all numbers and data points
-- **Current information**: Ensure practices/processes are up-to-date
-- **Technical accuracy**: Podcasting terminology and processes must be correct
-- **Castos features**: Ensure product references are accurate
+- **Verify statistics**: Check all numbers and data points — especially AI failure rates and ROI figures
+- **Current information**: Ensure technical practices are up-to-date (AI stack changes rapidly)
+- **Technical accuracy**: AI/ML terminology must be correct — Aiquire's credibility depends on this
+- **Aiquire services**: Ensure service references match current offerings at aiquire.siprahub.com
 
 ## Image Optimization
 
@@ -349,14 +352,16 @@ Use transition words to improve flow (target: one per paragraph):
 ### Image SEO
 **File Names**:
 - Descriptive and keyword-rich
-- ✅ `podcast-editing-software-interface.jpg`
+- ✅ `ai-consulting-double-diamond-methodology.jpg`
+- ✅ `mlops-model-monitoring-dashboard.jpg`
 - ❌ `IMG_12345.jpg`
 
 **Alt Text**:
 - Describe what image shows (accessibility + SEO)
 - Include keywords naturally where relevant
 - 125 characters or less
-- ✅ "Podcast editing software interface showing waveform and timeline"
+- ✅ "Double Diamond methodology diagram showing Discover, Define, Develop, Deliver phases for AI projects"
+- ✅ "MLOps model monitoring dashboard showing drift detection and performance metrics"
 - ❌ "Image"
 
 **Placement**:
@@ -375,9 +380,9 @@ Featured snippets appear at position 0 in Google search results. Optimize for th
 
 **Example**:
 ```markdown
-## What is Podcast Hosting?
+## What is MLOps?
 
-Podcast hosting is a service that stores your audio files and generates an RSS feed that distributes your episodes to podcast platforms like Apple Podcasts, Spotify, and Google Podcasts. Without a host, listeners can't discover or access your show on their favorite apps.
+MLOps (machine learning operations) is the set of practices and tools for deploying, monitoring, and maintaining machine learning models in production. Without MLOps, models degrade silently as data distributions shift — often without any obvious system error.
 ```
 
 ### List-Based Snippets
@@ -496,4 +501,4 @@ Before publishing, verify:
 
 ---
 
-**Remember**: SEO serves the user, not the algorithm. Never sacrifice content quality, accuracy, or helpfulness for keyword optimization. The best SEO is great content that genuinely helps podcast creators succeed.
+**Remember**: SEO serves the user, not the algorithm. Never sacrifice content quality, accuracy, or helpfulness for keyword optimisation. The best SEO is great content that genuinely helps business leaders and technical teams make better AI decisions — and trust Aiquire as the firm that can help them execute.

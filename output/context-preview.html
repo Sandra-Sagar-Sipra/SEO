@@ -1,0 +1,3701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aiquire SEO Machine — Context Files Preview</title>
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --card: #1e1e1e;
+    --border: #2a2a2a;
+    --accent: #5b6af0;
+    --accent2: #8b5cf6;
+    --text: #e8e8e8;
+    --muted: #888;
+    --code-bg: #121212;
+    --tag: #1a2a1a;
+    --tag-text: #4ade80;
+    --pill: #1a1a2e;
+    --pill-text: #818cf8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 40px 60px 36px;
+  }
+  .header-inner { max-width: 1200px; margin: 0 auto; }
+  .brand { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
+  .brand-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--accent); box-shadow: 0 0 12px var(--accent);
+  }
+  .brand h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
+  .brand span { color: var(--accent); }
+  .header-sub { color: var(--muted); font-size: 15px; margin-left: 28px; }
+  .header-pills { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+  .pill {
+    background: var(--pill); color: var(--pill-text);
+    padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
+    border: 1px solid #2a2a4a;
+  }
+  .pill.green { background: #0d2010; color: #4ade80; border-color: #1a4a20; }
+  .pill.amber { background: #201800; color: #fbbf24; border-color: #4a3800; }
+
+  /* ── Layout ── */
+  .main { max-width: 1200px; margin: 0 auto; padding: 40px 40px 80px; }
+
+  /* ── Stats bar ── */
+  .stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px; margin-bottom: 40px;
+  }
+  .stat-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px 24px;
+    text-align: center;
+  }
+  .stat-num { font-size: 28px; font-weight: 700; color: var(--accent); }
+  .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* ── File Grid ── */
+  .grid-label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px;
+    color: var(--muted); margin-bottom: 16px; font-weight: 600;
+  }
+  .file-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  .file-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 22px;
+    cursor: pointer;
+    transition: border-color .2s, transform .15s;
+    text-decoration: none; color: inherit;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .file-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .file-card.active { border-color: var(--accent); background: #1a1a2e; }
+  .file-icon { font-size: 20px; }
+  .file-name {
+    font-size: 15px; font-weight: 600; color: var(--text);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .file-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .file-badge {
+    align-self: flex-start;
+    background: var(--tag); color: var(--tag-text);
+    font-size: 10px; font-weight: 700;
+    padding: 2px 8px; border-radius: 4px;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+  }
+
+  /* ── Content viewer ── */
+  #viewer {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    display: none;
+  }
+  #viewer.open { display: block; }
+  .viewer-header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px;
+  }
+  .viewer-title { font-size: 16px; font-weight: 600; }
+  .viewer-close {
+    background: none; border: 1px solid var(--border);
+    color: var(--muted); cursor: pointer;
+    padding: 6px 14px; border-radius: 8px;
+    font-size: 13px; transition: color .2s, border-color .2s;
+  }
+  .viewer-close:hover { color: var(--text); border-color: var(--text); }
+  .viewer-body { padding: 36px 48px; overflow-x: auto; }
+
+  /* ── Markdown styling ── */
+  .md h1, .md h2, .md h3 { color: #e8e8f8; font-weight: 700; margin: 1.6em 0 0.6em; line-height: 1.3; }
+  .md h1 { font-size: 24px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+  .md h2 { font-size: 19px; color: #b0b8ff; }
+  .md h3 { font-size: 16px; color: #c4c4f0; }
+  .md p { margin: 0.8em 0; color: var(--text); }
+  .md a { color: var(--accent); text-decoration: none; }
+  .md a:hover { text-decoration: underline; }
+  .md code {
+    background: var(--code-bg); color: #a5f3fc;
+    padding: 2px 7px; border-radius: 5px;
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+    font-size: 13px;
+  }
+  .md pre {
+    background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px 24px;
+    overflow-x: auto; margin: 1em 0;
+  }
+  .md pre code { background: none; padding: 0; color: #a5f3fc; }
+  .md ul, .md ol { padding-left: 24px; margin: 0.8em 0; }
+  .md li { margin: 0.4em 0; color: var(--text); }
+  .md blockquote {
+    border-left: 3px solid var(--accent); padding: 10px 20px;
+    background: #12121e; border-radius: 0 8px 8px 0;
+    color: var(--muted); margin: 1em 0; font-style: italic;
+  }
+  .md table {
+    border-collapse: collapse; width: 100%; margin: 1em 0;
+    font-size: 14px;
+  }
+  .md th {
+    background: var(--card); color: var(--pill-text);
+    padding: 10px 16px; text-align: left;
+    border: 1px solid var(--border); font-size: 12px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .md td {
+    padding: 10px 16px; border: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .md tr:nth-child(even) td { background: #1a1a1a; }
+  .md strong { color: #e8e8ff; font-weight: 600; }
+  .md em { color: #c4c4e8; }
+  .md hr { border: none; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  /* ── Footer ── */
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 40px;
+    max-width: 1200px; margin: 0 auto;
+    color: var(--muted); font-size: 13px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 10px;
+  }
+  .footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-dot"></div>
+      <h1>Aiquire <span>SEO Machine</span></h1>
+    </div>
+    <p class="header-sub">Context files customized for Aiquire — AI Consulting &amp; Engineering</p>
+    <div class="header-pills">
+      <span class="pill green">✅ 10 Files Customized</span>
+      <span class="pill">🇬🇧 British English</span>
+      <span class="pill">🔍 50+ Target Keywords</span>
+      <span class="pill">🏆 6 Competitors Mapped</span>
+      <span class="pill amber">📝 Blog Template Ready</span>
+      <span class="pill">🔗 Full Links Map</span>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card"><div class="stat-num">40+</div><div class="stat-label">Production AI Projects</div></div>
+    <div class="stat-card"><div class="stat-num">3.2×</div><div class="stat-label">Average ROI in 12mo</div></div>
+    <div class="stat-card"><div class="stat-num">92%</div><div class="stat-label">Client Retention Rate</div></div>
+    <div class="stat-card"><div class="stat-num">8</div><div class="stat-label">Services Documented</div></div>
+    <div class="stat-card"><div class="stat-num">50+</div><div class="stat-label">Target Keywords</div></div>
+    <div class="stat-card"><div class="stat-num">10</div><div class="stat-label">Context Files</div></div>
+  </div>
+
+  <!-- File cards -->
+  <p class="grid-label">Click any file to preview its contents ↓</p>
+  <div class="file-grid">
+    <div class="file-card" data-slug="brand-voice.md" onclick="openFile('brand-voice.md')">
+  <div class="file-icon">🎙️</div>
+  <div class="file-name">Brand Voice</div>
+  <div class="file-desc">Tone, messaging pillars, voice examples, audience profiles</div>
+  <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
+    <span class="file-badge">✅ UPDATED</span>
+    <span style="font-size:11px;color:var(--muted)">~2,706 words</span>
+  </div>
+</div>
+    <div class="file-card" data-slug="features.md" onclick="openFile('features.md')">
+  <div class="file-icon">⚙️</div>
+  <div class="file-name">Features & Services</div>
+  <div class="file-desc">8 services, 4 case studies, pricing, differentiators</div>
+  <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
+    <span class="file-badge">✅ UPDATED</span>
+    <span style="font-size:11px;color:var(--muted)">~2,179 words</span>
+  </div>
+</div>
+    <div class="file-card" data-slug="internal-links-map.md" onclick="openFile('internal-links-map.md')">
+  <div class="file-icon">🔗</div>
+  <div class="file-name">Internal Links Map</div>
+  <div class="file-desc">All Aiquire pages mapped with anchor text guidance</div>
+  <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
+    <span class="file-badge">✅ UPDATED</span>
+    <span style="font-size:11px;color:var(--muted)">~1,552 words</span>
+  </div>
+</div>
+    <div class="file-card" data-slug="target-keywords.md" onclick="openFile('target-keywords.md')">
+  <div class="file-icon">🔍</div>
+  <div class="file-name">Target Keywords</div>
+  <div class="file-desc">8 keyword clusters, 50+ keywords, competitor gaps</div>
+  <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
+    <span class="file-badge">✅ UPDATED</span>
+    <span style="font-size:11px;color:var(--muted)">~2,303 words</span>
+  </div>
+</div>
+    <div class="file-card" data-slug="style-guide.md" onclick="openFile('style-guide.md')">
+  <div class="file-icon">✏️</div>
+  <div class="file-name">Style Guide</div>
+  <div class="file-desc">British English rules, formatting, terminology</div>
+  <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
+    <span class="file-badge">✅ UPDATED</span>
+    <span style="font-size:11px;color:var(--muted)">~2,446 words</span>
+  </div>
+</div>
+    <div class="file-card" data-slug="competitor-analysis.md" onclick="openFile('competitor-analysis.md')">
+  <div class="file-icon">🏆</div>
+  <div class="file-name">Competitor Analysis</div>
+  <div class="file-desc">6 competitors, content gaps, differentiation opportunities</div>
+  <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
+    <span class="file-badge">✅ UPDATED</span>
+    <span style="font-size:11px;color:var(--muted)">~2,220 words</span>
+  </div>
+</div>
+    <div class="file-card" data-slug="seo-guidelines.md" onclick="openFile('seo-guidelines.md')">
+  <div class="file-icon">📈</div>
+  <div class="file-name">SEO Guidelines</div>
+  <div class="file-desc">Content structure, meta elements, readability rules</div>
+  <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
+    <span class="file-badge">✅ UPDATED</span>
+    <span style="font-size:11px;color:var(--muted)">~2,742 words</span>
+  </div>
+</div>
+    <div class="file-card" data-slug="writing-examples.md" onclick="openFile('writing-examples.md')">
+  <div class="file-icon">📝</div>
+  <div class="file-name">Writing Examples</div>
+  <div class="file-desc">Voice reference examples and blog post benchmarks</div>
+  <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
+    <span class="file-badge">✅ UPDATED</span>
+    <span style="font-size:11px;color:var(--muted)">~1,032 words</span>
+  </div>
+</div>
+    <div class="file-card" data-slug="cro-best-practices.md" onclick="openFile('cro-best-practices.md')">
+  <div class="file-icon">💡</div>
+  <div class="file-name">CRO Best Practices</div>
+  <div class="file-desc">Landing page conversion rules, CTAs, trust signals</div>
+  <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
+    <span class="file-badge">📄 INCLUDED</span>
+    <span style="font-size:11px;color:var(--muted)">~1,533 words</span>
+  </div>
+</div>
+    <div class="file-card" data-slug="blog-post-template.md" onclick="openFile('blog-post-template.md')">
+  <div class="file-icon">📄</div>
+  <div class="file-name">Blog Post Template</div>
+  <div class="file-desc">6-section template based on Ben's Bites format</div>
+  <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
+    <span class="file-badge">✅ CUSTOMIZED</span>
+    <span style="font-size:11px;color:var(--muted)">~1,809 words</span>
+  </div>
+</div>
+  </div>
+
+  <!-- Viewer -->
+  <div id="viewer">
+    <div class="viewer-header">
+      <span class="viewer-title" id="viewer-title">—</span>
+      <button class="viewer-close" onclick="closeViewer()">✕ Close</button>
+    </div>
+    <div class="viewer-body">
+      <div class="md" id="viewer-content"></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <span>Aiquire SEO Machine · Customized March 2026</span>
+  <a href="https://aiquire.siprahub.com" target="_blank">aiquire.siprahub.com ↗</a>
+</div>
+
+<script>
+const contents = {"brand-voice.md": `<h1>Aiquire Brand Voice &amp; Messaging</h1>
+<p>This document defines the Aiquire brand voice, tone, and messaging framework. Reference this when writing all content to ensure consistency across every blog post, landing page, case study, and piece of marketing material.</p>
+<hr />
+<h2>Brand Overview</h2>
+<p><strong>Company</strong>: Aiquire — AI Consulting &amp; Engineering (a SipraHub company)<br />
+<strong>Website</strong>: https://aiquire.siprahub.com<br />
+<strong>Tagline</strong>: "We put AI exactly where your business wins. Faster than you expect."<br />
+<strong>Mission</strong>: Close the intelligence gap between AI's potential and what businesses are actually doing with it.</p>
+<hr />
+<h2>Brand Voice Pillars</h2>
+<h3>1. Candid &amp; Direct</h3>
+<ul>
+<li><strong>What it means</strong>: We call things what they are. The AI industry is full of hype, vague promises, and demos that never reach production. We say what others won't — including when AI is NOT the right answer.</li>
+<li><strong>How it sounds</strong>: Short, declarative sentences. No hedging. No corporate fluff. We don't say "we leverage synergistic AI-powered solutions" — we say "we build AI that works."</li>
+<li><strong>Example</strong>: "85% of AI pilots never reach production. The reason is almost always the same: the wrong problem was chosen. We fix that before we write a single line of code."</li>
+<li><strong>Avoid</strong>: Buzzword soup ("revolutionary", "transformative", "next-generation"), vague promises, passive voice, excessive qualifiers.</li>
+</ul>
+<h3>2. Results-Obsessed</h3>
+<ul>
+<li><strong>What it means</strong>: Every sentence should point toward business outcomes — ROI, time saved, revenue generated, costs reduced. We don't talk about technology for its own sake.</li>
+<li><strong>How it sounds</strong>: Specific numbers whenever possible. "30% reduction in resolution time" not "improved efficiency." Outcomes first, technology second.</li>
+<li><strong>Example</strong>: "The insurance co-pilot we built cut resolution time by 30% and reduced new agent training costs by 50%. The model is interesting. Those numbers are what matter."</li>
+<li><strong>Avoid</strong>: Tech specs without context, feature descriptions without business impact, generic "improved productivity" claims.</li>
+</ul>
+<h3>3. Technically Credible</h3>
+<ul>
+<li><strong>What it means</strong>: We know this field deeply — our team trained at McKinsey, BCG, Deloitte, and Accenture. We can talk to a C-suite about ROI and to an ML engineer about architecture in the same breath.</li>
+<li><strong>How it sounds</strong>: Precise terminology used correctly. We don't oversimplify, but we don't weaponize jargon either. We define terms when they help, skip them when they don't.</li>
+<li><strong>Example</strong>: "We build RAG pipelines with grounding and guardrails — because a generative AI deployment that hallucinates isn't just unhelpful, it's a liability."</li>
+<li><strong>Avoid</strong>: Pretending complexity doesn't exist (dumbing down), drowning readers in acronyms without purpose, name-dropping technologies without explaining why they matter.</li>
+</ul>
+<h3>4. Partnership Mindset</h3>
+<ul>
+<li><strong>What it means</strong>: We amplify your team — we never replace it. Every solution we build is designed to make your existing people more productive. We're not a vendor. We're the team your team wishes it had built this in-house.</li>
+<li><strong>How it sounds</strong>: "Your", "we", "together", "your team" language. We position ourselves alongside the client, not above them.</li>
+<li><strong>Example</strong>: "Everything we build, you own completely. No vendor lock-in. Your cloud, your codebase, your terms."</li>
+<li><strong>Avoid</strong>: Positioning Aiquire as the hero (clients are the hero), implying clients can't do this themselves forever, paternalistic tone.</li>
+</ul>
+<h3>5. Urgency Without Fear</h3>
+<ul>
+<li><strong>What it means</strong>: The AI window is real and open now. Companies that move are pulling ahead. But we don't use fear tactics — we frame this as opportunity, not threat.</li>
+<li><strong>How it sounds</strong>: Forward-looking, momentum-building. "The window to establish internal AI capability is now — before your competitors do."</li>
+<li><strong>Example</strong>: "Most companies waste months on AI strategy decks that never get executed. Skip the uncertainty. Leave our discovery call knowing exactly where AI can move the needle."</li>
+<li><strong>Avoid</strong>: Fearmongering, manufactured urgency, exaggerated competitor threats.</li>
+</ul>
+<hr />
+<h2>Tone Guidelines</h2>
+<h3>General Tone: Senior Consultant Who Tells You the Truth</h3>
+<p>Imagine the most experienced AI consultant in the room — someone who's shipped 40+ production systems, seen every failure mode, and genuinely wants your project to succeed. They speak plainly. They challenge assumptions. They don't sell you something you don't need. They get straight to the point. That's the Aiquire voice.</p>
+<p>We are professional but not stiff. Intelligent but not academic. Confident but not arrogant. Honest even when it's uncomfortable.</p>
+<h3>Tone Variations by Content Type</h3>
+<p><strong>How-To Guides / Educational Content</strong>: Clear, instructive, practical<br />
+- "Here's exactly how to evaluate whether your data is ready for ML."<br />
+- "Most teams skip this step — and pay for it in production."<br />
+- "You don't need a PhD to understand this. Here's what matters."</p>
+<p><strong>Strategy &amp; Thought Leadership</strong>: Authoritative, challenging, forward-looking<br />
+- "The question isn't whether to adopt AI — it's which problems to solve first."<br />
+- "80% of enterprise AI projects fail before they begin. Here's the pattern."<br />
+- "This is what good AI governance actually looks like in practice."</p>
+<p><strong>Industry/Sector Content</strong>: Domain-specific, data-backed, grounded<br />
+- "Healthcare AI isn't just about chatbots. It's about 40% of staff time freed up."<br />
+- "Financial services has unique compliance constraints. Here's how to navigate them."<br />
+- "In retail, the ROI case for AI demand forecasting is unusually clear."</p>
+<p><strong>Service/Product Content</strong>: Benefit-first, honest, conversion-focused<br />
+- "This is what the AI Strategy engagement delivers — and how long it takes."<br />
+- "Here's what working with us looks like from week one to go-live."<br />
+- "Not sure if you need custom ML or a packaged solution? Here's the honest breakdown."</p>
+<hr />
+<h2>Messaging Framework</h2>
+<h3>Core Brand Messages</h3>
+<h4>Message 1: The Intelligence Gap</h4>
+<ul>
+<li><strong>Concept</strong>: There is a massive gap between AI's potential and what businesses are actually doing with it — and it's costing companies money every day.</li>
+<li><strong>Key Points</strong>:</li>
+<li>400M+ businesses worldwide; fewer than 25M pay for any AI tool</li>
+<li>85% of AI pilots never reach production</li>
+<li>Leads go cold, proposals take hours, teams waste half their day on automatable tasks</li>
+<li><strong>Usage</strong>: Opening hook for homepage, blog intros, discovery call positioning</li>
+</ul>
+<h4>Message 2: Strategy + Engineering (Not Just One or the Other)</h4>
+<ul>
+<li><strong>Concept</strong>: Most AI firms are either consultants who don't build or engineers who don't strategise. Aiquire does both — so nothing gets lost between the deck and the deploy.</li>
+<li><strong>Key Points</strong>:</li>
+<li>Business consultants + production ML engineers in one team</li>
+<li>Double Diamond methodology: find the right problem before building the right solution</li>
+<li>We start with your business, not with AI</li>
+<li><strong>Usage</strong>: Why Aiquire / differentiator content, comparison articles, service pages</li>
+</ul>
+<h4>Message 3: Pilot to Production</h4>
+<ul>
+<li><strong>Concept</strong>: We obsess over shipping production systems, not impressive demos. 85% of AI projects fail — ours don't.</li>
+<li><strong>Key Points</strong>:</li>
+<li>40+ AI projects delivered to production</li>
+<li>3.2x average ROI within 12 months</li>
+<li>92% client retention rate</li>
+<li>MLOps, monitoring, governance built in from the start</li>
+<li><strong>Usage</strong>: Trust-building sections, case studies, ROI-focused content</li>
+</ul>
+<h4>Message 4: Your Tech, Your Terms</h4>
+<ul>
+<li><strong>Concept</strong>: We work with your existing cloud, your codebase, your stack. No lock-in. You own everything we build.</li>
+<li><strong>Key Points</strong>:</li>
+<li>Cloud-agnostic (AWS, GCP, Azure, hybrid)</li>
+<li>No proprietary platforms that create dependency</li>
+<li>Knowledge transfer included — your team learns alongside us</li>
+<li><strong>Usage</strong>: Overcoming vendor lock-in objections, enterprise sales content</li>
+</ul>
+<h4>Message 5: We Amplify Your Team</h4>
+<ul>
+<li><strong>Concept</strong>: AI done right makes your people more productive — not redundant. Your receptionist handles patients instead of phone tag. Your analysts focus on insight, not data entry.</li>
+<li><strong>Key Points</strong>:</li>
+<li>Change management and adoption built into every engagement</li>
+<li>Training programmes to ensure teams embrace AI</li>
+<li>AI designed around how your people actually work</li>
+<li><strong>Usage</strong>: Change management content, healthcare/ops-heavy industries, training service content</li>
+</ul>
+<h3>Value Propositions by Segment</h3>
+<p><strong>For C-Suite / Business Leaders</strong>:<br />
+"Aiquire delivers AI initiatives that actually reach production — with modelled ROI before we build anything and measurable results within 12 months."</p>
+<p><strong>For CTOs / Technical Leaders</strong>:<br />
+"We build production-grade ML systems integrated into your existing stack — no vendor lock-in, full knowledge transfer, MLOps governance from day one."</p>
+<p><strong>For Operations Leaders</strong>:<br />
+"We identify exactly where AI eliminates your team's most painful manual work, build the automation, and ensure your people can run it themselves."</p>
+<p><strong>For Healthcare Organisations</strong>:<br />
+"We build multilingual, compliant AI systems that free your clinical staff from administrative burden — without compromising patient safety."</p>
+<p><strong>For Financial Services</strong>:<br />
+"We deliver AI-powered risk, compliance, and operations solutions built to your regulatory requirements — with audit trails and governance frameworks included."</p>
+<p><strong>For Mid-Market Companies (15–500 employees)</strong>:<br />
+"You don't need a Big 4 budget to get enterprise-grade AI. Aiquire gives you the strategy and engineering capability that used to take a team of 20 to build."</p>
+<hr />
+<h2>Writing Style Guidelines</h2>
+<h3>Sentence Structure</h3>
+<ul>
+<li><strong>Vary length deliberately</strong>: Short sentences create punch. Longer sentences build context and nuance. Alternate between them.</li>
+<li><strong>Active voice preferred</strong>: "We build production systems" not "Production systems are built by us."</li>
+<li><strong>Average length</strong>: 15–20 words per sentence</li>
+<li><strong>Lead with the point</strong>: Don't bury the insight at the end of a long clause.</li>
+</ul>
+<h3>Paragraph Structure</h3>
+<ul>
+<li><strong>Length</strong>: 2–4 sentences per paragraph. No walls of text.</li>
+<li><strong>One idea per paragraph</strong>: If you're covering two ideas, split the paragraph.</li>
+<li><strong>White space is a feature</strong>: Readers scan. Short paragraphs are more readable — especially on mobile.</li>
+</ul>
+<h3>Word Choice</h3>
+<ul>
+<li><strong>Specific over vague</strong>: "30% reduction in resolution time" not "significant improvement"</li>
+<li><strong>Plain over fancy</strong>: "use" not "utilise", "show" not "demonstrate", "start" not "commence"</li>
+<li><strong>Active verbs</strong>: "Build", "Ship", "Deliver", "Launch", "Measure", "Deploy"</li>
+<li><strong>Cut the fluff</strong>: Remove "very", "really", "truly", "actually", "leverage", "innovative", "cutting-edge", "state-of-the-art"</li>
+</ul>
+<h3>Terminology Preferences</h3>
+<p><strong>Say This</strong> → <strong>Not That</strong><br />
+- "Production AI" → "AI deployment" (production is the bar we set)<br />
+- "AI that works" → "AI solutions" (too vague and generic)<br />
+- "Machine learning" or "ML" → "artificial intelligence" when being specific (use correct term for context)<br />
+- "Build" → "develop/create" (we're builders — own it)<br />
+- "Ship" → "deliver" (preferred for software engineering context)<br />
+- "ROI" → "return on investment" (acronym is fine after first use)<br />
+- "Organisation" → "organization" (use British spelling — Aiquire serves international/UAE market)<br />
+- "Programme" → "program" (use British spelling consistently)<br />
+- "Modelled" → "modeled" (British spelling)</p>
+<h3>British/International English</h3>
+<p>Aiquire is a UAE-based company serving international clients. Use British/international English:<br />
+- organisation (not organization)<br />
+- programme (not program, unless referring to software)<br />
+- modelled (not modeled)<br />
+- optimise (not optimize)<br />
+- recognise (not recognize)<br />
+- customisation (not customization)<br />
+- behaviour (not behavior)</p>
+<hr />
+<h2>Content Formatting</h2>
+<h3>Headlines</h3>
+<ul>
+<li><strong>Specific and benefit-focused</strong>: "How to Evaluate AI Vendors Without Getting Burned" not "AI Vendor Guide"</li>
+<li><strong>Challenge assumptions</strong>: "Why Your AI Pilot Failed Before You Started" works well for Aiquire's audience</li>
+<li><strong>Use numbers when honest</strong>: "40+ Production AI Systems: What We Learned" not inflated claims</li>
+<li><strong>Keep under 60 characters for SEO</strong>: Truncated headlines lose clicks</li>
+</ul>
+<h3>Subheadings</h3>
+<ul>
+<li><strong>Make them standalone</strong>: Readers scanning H2s should understand the article's structure</li>
+<li><strong>Use question format when it matches user intent</strong>: "What Is MLOps and Why Does It Matter?"</li>
+<li><strong>Avoid generic labels</strong>: "Introduction", "Overview", "Benefits" — be specific</li>
+</ul>
+<h3>Lists</h3>
+<ul>
+<li>Use for: Steps, comparisons, feature sets, pros/cons, questions</li>
+<li><strong>Parallel structure</strong>: All items in a list should be the same grammatical form</li>
+<li><strong>Max 7 items</strong> before breaking into sections</li>
+<li><strong>Lead each item with the key word</strong>: "Build: We construct production systems..." not "We construct production systems (Build)"</li>
+</ul>
+<h3>Calls-to-Action</h3>
+<ul>
+<li><strong>Primary CTA</strong>: "Book a Free Discovery Call" — direct, low commitment, specific</li>
+<li><strong>Secondary CTA</strong>: "Get a Free AI Workflow Audit" — value-first, concrete deliverable</li>
+<li><strong>Avoid</strong>: "Learn more", "Click here", "Contact us" (too generic)</li>
+<li><strong>Place CTAs contextually</strong>: After a case study = "See how we did this for [industry]". After a how-to = "Want us to audit your AI readiness?"</li>
+</ul>
+<hr />
+<h2>Voice Examples</h2>
+<h3>Excellent Aiquire Voice ✅</h3>
+<p>"Most AI projects don't fail because of bad technology. They fail because they solve the wrong problem.</p>
+<p>An insurance company comes to us wanting a chatbot. We spend the first two weeks asking harder questions: Where is your team spending time they shouldn't be? Where does poor data quality create downstream rework? What would a 30% reduction in resolution time mean for your P&amp;L?</p>
+<p>That's where we found the real opportunity — a real-time AI co-pilot that analyses customer intent and sentiment, surfaces the right answer, and reduces the cognitive load on your agents. Resolution time dropped 30%. Customer satisfaction climbed 45%. New agent training costs halved.</p>
+<p>The chatbot idea would have been forgotten in six months. This system is core infrastructure."</p>
+<p><strong>Why this works</strong>:<br />
+- Opens with a challenge to conventional thinking<br />
+- Shows the methodology (questioning assumptions) not just the result<br />
+- Specific, real metrics with business context<br />
+- Positions Aiquire's approach as superior without being arrogant<br />
+- Ends with a memorable contrast (chatbot vs. core infrastructure)</p>
+<h3>Not Aiquire Voice ❌</h3>
+<p>"Aiquire offers cutting-edge, state-of-the-art artificial intelligence solutions that leverage the latest innovations in machine learning and generative AI to help organisations across all industries transform their operations, optimise their workflows, and unlock new value from their data assets through our comprehensive suite of end-to-end AI services."</p>
+<p><strong>Why this fails</strong>:<br />
+- No specific claims — every AI company says this<br />
+- Buzzword heavy ("cutting-edge", "state-of-the-art", "leverage", "transform")<br />
+- No outcomes, no proof, no business value<br />
+- One sentence that should be five<br />
+- Sounds like it was written to sound impressive, not to actually communicate</p>
+<hr />
+<h2>Audience Understanding</h2>
+<h3>Who We Write For</h3>
+<p><strong>Primary Audience</strong>: Business Decision-Makers at Mid-Market Companies<br />
+- C-suite executives (CEO, COO, CTO, CFO) at companies with 15–500 employees<br />
+- Feeling pressure to adopt AI but unclear on where to start<br />
+- Have seen AI projects fail — either at their company or at peers'<br />
+- Results-oriented: care about ROI, timelines, and not wasting budget<br />
+- Technically literate but not necessarily hands-on engineers<br />
+- Industries: healthcare, financial services, retail, manufacturing, logistics, real estate, publishing, education</p>
+<p><strong>Secondary Audiences</strong>:<br />
+- <strong>VPs of Operations / Heads of Technology</strong>: Want to solve specific workflow pain points with AI<br />
+- <strong>Innovation / Digital Transformation Leads</strong>: Building internal AI capability and need a partner<br />
+- <strong>ML Engineers / Data Scientists</strong>: Evaluating Aiquire as a technical partner or employer<br />
+- <strong>Enterprise IT Leaders</strong>: Concerned about security, governance, and infrastructure</p>
+<h3>What They Care About</h3>
+<p><strong>Top Priorities</strong>:<br />
+1. Measurable ROI — "Will this pay for itself, and how quickly?"<br />
+2. Risk reduction — "What happens if this doesn't work?"<br />
+3. Speed to value — "How long until we see results?"<br />
+4. Team adoption — "Will my people actually use this?"<br />
+5. Ownership — "Who owns this after you leave?"</p>
+<p><strong>Pain Points</strong>:<br />
+1. Previous AI projects that never made it to production<br />
+2. Vendors who oversell and underdeliver<br />
+3. Expensive consultants who produce strategy decks with no implementation<br />
+4. Fear of vendor lock-in and dependency<br />
+5. AI hype without clear business application to their specific context</p>
+<h3>How to Serve Them</h3>
+<ul>
+<li><strong>Respect their time</strong>: Get to the point. They're busy executives, not students.</li>
+<li><strong>Lead with outcomes</strong>: They care about business results, not technology elegance.</li>
+<li><strong>Acknowledge the failure rate</strong>: They've seen AI projects fail. Validate that scepticism, then show how we're different.</li>
+<li><strong>Be specific about process</strong>: Show <em>how</em> we work, not just <em>what</em> we deliver — the methodology earns trust.</li>
+<li><strong>Cite proof</strong>: Case studies, client quotes, and specific metrics matter enormously to this audience.</li>
+</ul>
+<hr />
+<h2>Quality Checklist</h2>
+<p>Before publishing any content, verify:</p>
+<ul>
+<li>[ ] <strong>Voice</strong>: Sounds like Aiquire — direct, credible, outcome-focused</li>
+<li>[ ] <strong>Tone</strong>: Appropriate for content type and reader's funnel stage</li>
+<li>[ ] <strong>Value</strong>: Provides genuine insight, not generic AI advice</li>
+<li>[ ] <strong>Clarity</strong>: Technical concepts explained simply where needed</li>
+<li>[ ] <strong>Specificity</strong>: Numbers and examples used rather than vague claims</li>
+<li>[ ] <strong>British English</strong>: Organisation, programme, optimise, etc.</li>
+<li>[ ] <strong>CTA</strong>: Clear, contextual call-to-action present</li>
+<li>[ ] <strong>Messaging</strong>: Aligns with at least one core brand message</li>
+<li>[ ] <strong>Proof</strong>: Case studies, stats, or testimonials referenced where relevant</li>
+</ul>
+<hr />
+<p><strong>Remember</strong>: Every piece of content should make business leaders feel understood, not sold to. We're not pitching — we're demonstrating expertise. The best Aiquire content makes readers think: "These people get it. I should talk to them."</p>`, "features.md": `<h1>Aiquire Features &amp; Services</h1>
+<p>This document outlines Aiquire's key services, capabilities, and differentiators to inform content creation that drives discovery call bookings and qualified leads.</p>
+<p><strong>Website</strong>: https://aiquire.siprahub.com<br />
+<strong>Primary CTA</strong>: Book a Free Discovery Call → https://aiquire.siprahub.com/contact<br />
+<strong>Secondary CTA</strong>: Get a Free AI Workflow Audit → https://aiquire.siprahub.com/audit</p>
+<hr />
+<h2>Core Services &amp; Value Propositions</h2>
+<h3>1. <strong>AI Strategy &amp; Business Consulting</strong></h3>
+<ul>
+<li><strong>What it is</strong>: End-to-end AI strategy practice — AI readiness assessment, business process analysis, use case prioritisation with modelled ROI, change management, and AI governance frameworks. Consultants carry backgrounds at McKinsey, BCG, Deloitte, and Accenture.</li>
+<li><strong>Benefit</strong>: Clients stop wasting budget on the wrong AI problems and get a prioritised roadmap with ROI models their leadership can actually approve.</li>
+<li><strong>Conversion Angle</strong>: "Know exactly where AI fits in your business — before you spend a pound on building anything."</li>
+<li><strong>Service Page</strong>: https://aiquire.siprahub.com/services/ai-strategy-consulting</li>
+</ul>
+<h3>2. <strong>AI/ML Development</strong></h3>
+<ul>
+<li><strong>What it is</strong>: Custom machine learning model development — predictive analytics, NLP, computer vision, and bespoke ML systems trained on client data and integrated into client workflows.</li>
+<li><strong>Benefit</strong>: Proprietary models trained on your data outperform generic off-the-shelf tools — creating genuine competitive differentiation.</li>
+<li><strong>Conversion Angle</strong>: "Off-the-shelf AI is built for the average use case. Your advantage comes from models trained on your data."</li>
+<li><strong>Service Page</strong>: https://aiquire.siprahub.com/services/ai-ml-development</li>
+</ul>
+<h3>3. <strong>Generative AI &amp; LLM Solutions</strong></h3>
+<ul>
+<li><strong>What it is</strong>: Custom LLM development, RAG (retrieval-augmented generation) pipelines, conversational AI, and autonomous AI agent design — built with grounding, guardrails, and evaluation frameworks.</li>
+<li><strong>Benefit</strong>: Generative AI that is genuinely useful and trustworthy — not a liability that hallucinates in front of customers or regulators.</li>
+<li><strong>Conversion Angle</strong>: "Go beyond chatbots. Build AI that automates real workflows — with guardrails that keep it safe."</li>
+<li><strong>Service Page</strong>: https://aiquire.siprahub.com/services/generative-ai-llm</li>
+</ul>
+<h3>4. <strong>AI-Powered Software Development</strong></h3>
+<ul>
+<li><strong>What it is</strong>: Full-stack product engineering with AI baked into the core — intelligent web and mobile apps, workflow automation, AI integration services connecting new capabilities to existing systems.</li>
+<li><strong>Benefit</strong>: Turns ML outputs into actual business tools — not notebooks that engineers can't deploy, but products your teams use daily.</li>
+<li><strong>Conversion Angle</strong>: "A model without software is not a product. We build the full stack — interface, automation, integration."</li>
+<li><strong>Service Page</strong>: https://aiquire.siprahub.com/services/ai-powered-software</li>
+</ul>
+<h3>5. <strong>MLOps &amp; AI Infrastructure</strong></h3>
+<ul>
+<li><strong>What it is</strong>: CI/CD for machine learning, model monitoring and drift detection, GPU infrastructure, multi-cloud deployment (AWS, GCP, Azure, hybrid).</li>
+<li><strong>Benefit</strong>: Production ML systems that don't degrade silently — with monitoring, alerting, and governance so your AI investments keep performing.</li>
+<li><strong>Conversion Angle</strong>: "A model that isn't monitored is a liability. We keep your AI performing — not just at launch, but for years."</li>
+<li><strong>Service Page</strong>: https://aiquire.siprahub.com/services/mlops-infrastructure</li>
+</ul>
+<h3>6. <strong>AI Academy &amp; Training</strong></h3>
+<ul>
+<li><strong>What it is</strong>: Four-programme training offering — AI Literacy Workshop (executive half-day), AI Tools Hands-On Training (1–2 days), AI Champions Programme (4–6 weeks), AI Policy &amp; Guidelines Development (2–3 weeks).</li>
+<li><strong>Benefit</strong>: Technology without adoption is a write-off. Trained teams use AI daily, champion it internally, and govern it safely — dramatically increasing ROI on any AI investment.</li>
+<li><strong>Conversion Angle</strong>: "The organisations winning with AI have internal champions who drive adoption from within. We build that capability."</li>
+<li><strong>Service Page</strong>: https://aiquire.siprahub.com/services/ai-academy</li>
+<li><strong>Pricing</strong>: $500–$15,000 depending on format and scope</li>
+</ul>
+<h3>7. <strong>Packaged AI Solutions</strong></h3>
+<ul>
+<li><strong>What it is</strong>: Pre-built, maintained automation packages that deploy in days with predictable monthly pricing. Six packages: Content &amp; Podcast Repurposing Engine, Real Estate Listing Automation, Client Onboarding Automation, Proposal &amp; Document Generation, Review &amp; Reputation Management, Reporting &amp; Analytics Automation.</li>
+<li><strong>Benefit</strong>: Proven automations for specific pain points — without the months-long custom project. Subscribe to the solution, not the project.</li>
+<li><strong>Conversion Angle</strong>: "Deploy in days, not months. Predictable pricing. Maintained for you. Starting at $197/month."</li>
+<li><strong>Service Page</strong>: https://aiquire.siprahub.com/services/packaged-solutions</li>
+<li><strong>Pricing</strong>: Starting at $197/month (includes setup, customisation, maintenance, monthly optimisation)</li>
+</ul>
+<h3>8. <strong>Claude Training Practice</strong></h3>
+<ul>
+<li><strong>What it is</strong>: Structured training for both business teams (Claude.ai, Claude Cowork) and engineering teams (Claude Code — installation, configuration, CLAUDE.md architecture, MCP integration, CI/CD, security). Two distinct tracks.</li>
+<li><strong>Benefit</strong>: Teams that formally train on Claude see dramatically better adoption, higher output quality, and faster time-to-value than those who just hand out subscriptions.</li>
+<li><strong>Conversion Angle</strong>: "The gap between using Claude and mastering Claude is costing you. We close that gap."</li>
+<li><strong>Service Page</strong>: https://aiquire.siprahub.com/claude-training</li>
+</ul>
+<hr />
+<h2>Technical Capabilities</h2>
+<h3>AI &amp; Machine Learning</h3>
+<ul>
+<li><strong>Custom ML Model Development</strong>: Bespoke models trained on proprietary client data</li>
+<li><strong>Natural Language Processing</strong>: Text classification, entity extraction, sentiment analysis, document understanding</li>
+<li><strong>Computer Vision</strong>: Image classification, object detection, visual inspection systems</li>
+<li><strong>Predictive Analytics</strong>: Forecasting for demand, churn, risk, and operational metrics</li>
+<li><strong>RAG Systems</strong>: Retrieval-augmented generation pipelines for knowledge-grounded AI</li>
+<li><strong>AI Agent Design</strong>: Autonomous agents that plan, execute, and adapt to business objectives</li>
+<li><strong>Conversational AI</strong>: Intelligent assistants handling real workflows, not just FAQs</li>
+</ul>
+<h3>Software &amp; Infrastructure</h3>
+<ul>
+<li><strong>Full-Stack Development</strong>: React, Node.js, FastAPI, Python backends</li>
+<li><strong>Database</strong>: PostgreSQL, Supabase (real-time sync), Redis</li>
+<li><strong>Cloud Platforms</strong>: AWS, Google Cloud Platform, Microsoft Azure, hybrid environments</li>
+<li><strong>MLOps CI/CD</strong>: Automated training, testing, and deployment pipelines</li>
+<li><strong>Model Monitoring</strong>: Performance tracking, drift detection, automated alerts</li>
+<li><strong>GPU Infrastructure</strong>: Optimised compute for training and inference at scale</li>
+<li><strong>Asynchronous Processing</strong>: Celery, Redis for scalable background tasks</li>
+</ul>
+<h3>AI Models &amp; Integrations</h3>
+<ul>
+<li><strong>Anthropic Claude</strong>: Claude Sonnet, Claude Opus (including Claude Code)</li>
+<li><strong>Google Gemini</strong>: Gemini 1.5 Pro integration</li>
+<li><strong>OpenRouter</strong>: Multi-model routing</li>
+<li><strong>AssemblyAI</strong>: Transcription and audio processing</li>
+<li><strong>OpenAI</strong>: GPT model integration</li>
+<li><strong>Vector Databases</strong>: For RAG pipeline implementation</li>
+</ul>
+<hr />
+<h2>Engagement Models</h2>
+<h3>Discovery Sprint (2–4 weeks)</h3>
+<p>Validate a use case fast. Proof-of-concept, feasibility analysis, and ROI estimate — confident go/no-go decision.</p>
+<h3>Project-Based (Fixed scope)</h3>
+<p>Fixed scope, fixed timeline, fixed budget. Milestones defined upfront and delivered on.</p>
+<h3>Dedicated AI Team (Ongoing)</h3>
+<p>Embedded team of AI engineers, data scientists, and ML ops specialists working as an extension of your team.</p>
+<h3>AI-as-a-Service (Monthly retainer)</h3>
+<p>Ongoing model monitoring, optimisation, retraining, and support.</p>
+<h3>Staff Augmentation (Flexible)</h3>
+<p>Senior ML engineers or data scientists for specific projects or time periods.</p>
+<h3>AI Academy &amp; Training (By programme)</h3>
+<p>From half-day executive sessions to multi-week AI Champions programmes. $500–$15,000 depending on scope.</p>
+<h3>Packaged Solutions (Monthly subscription)</h3>
+<p>Pre-built automations starting at $197/month.</p>
+<hr />
+<h2>Competitive Differentiators</h2>
+<h3>vs. Big 4 / Management Consulting Firms (Accenture AI, McKinsey Digital, BCG Gamma, Deloitte AI)</h3>
+<ul>
+<li><strong>Accessible for mid-market</strong> (Big 4 minimum engagements often $500K+; Aiquire serves companies of all sizes)</li>
+<li><strong>Builds, not just advises</strong> (Strategy firms produce decks; we ship production systems)</li>
+<li><strong>Faster time to value</strong> (Discovery Sprint in 2–4 weeks vs. months of consulting)</li>
+<li><strong>No vendor lock-in</strong> (Big 4 often tied to specific cloud vendor partnerships)</li>
+</ul>
+<h3>vs. Offshore Development Shops (Infosys AI, TCS, Wipro)</h3>
+<ul>
+<li><strong>Consulting DNA</strong> (We start with business problems, not technical specs)</li>
+<li><strong>Production focus</strong> (We include MLOps, governance, and knowledge transfer — not just code delivery)</li>
+<li><strong>Change management built in</strong> (Adoption and training are part of every engagement)</li>
+<li><strong>Transparent partnership</strong> (Weekly updates, shared repos, clear milestones)</li>
+</ul>
+<h3>vs. Freelance / Staff Aug Platforms (Toptal, Turing, Upwork)</h3>
+<ul>
+<li><strong>Full-team capability</strong> (Business consultants + ML engineers + software developers + MLOps)</li>
+<li><strong>Methodology</strong> (Double Diamond process ensures right problem before right solution)</li>
+<li><strong>Accountability</strong> (Fixed-scope projects with agreed KPIs, not hourly billing with no outcome guarantee)</li>
+<li><strong>Long-term partnership</strong> (92% client retention; ongoing support built in)</li>
+</ul>
+<h3>vs. DIY / In-House AI Teams</h3>
+<ul>
+<li><strong>Speed</strong>: Faster from idea to production than building an internal team</li>
+<li><strong>Expertise breadth</strong>: Full stack of capabilities (strategy + ML + software + MLOps + training)</li>
+<li><strong>Risk reduction</strong>: 40+ production systems worth of experience avoiding common failure modes</li>
+<li><strong>Knowledge transfer</strong>: We train your team so you can own it after we leave</li>
+</ul>
+<hr />
+<h2>Use Cases by Industry</h2>
+<h3>Healthcare &amp; Life Sciences</h3>
+<ul>
+<li>Multilingual patient-facing AI assistants (voice and text)</li>
+<li>Clinical administrative automation</li>
+<li>Patient intake and triage support</li>
+<li>Medical documentation processing</li>
+<li>Appointment scheduling AI</li>
+<li><strong>Case Study</strong>: Dhi assistant for Poorna Neuro — 40% staff time freed, 6 languages, 24/7 availability</li>
+</ul>
+<h3>Financial Services &amp; Insurance</h3>
+<ul>
+<li>Real-time AI co-pilot for customer service agents</li>
+<li>Sentiment and intent analysis</li>
+<li>Risk and fraud detection models</li>
+<li>Automated compliance documentation</li>
+<li>Loan/claim processing automation</li>
+<li><strong>Case Study</strong>: Insurance AI co-pilot — 30% faster resolution, 45% satisfaction improvement, 50% training cost reduction</li>
+</ul>
+<h3>Publishing &amp; Media</h3>
+<ul>
+<li>Editorial workflow automation</li>
+<li>Manuscript tracking and management</li>
+<li>Content repurposing (podcast to blog, long-form to social)</li>
+<li>Automated email template systems</li>
+<li>Role-based content management platforms</li>
+<li><strong>Case Study</strong>: ContentConcepts editorial platform — 3 user roles, 7 email templates, 100% workflow automation</li>
+</ul>
+<h3>Education &amp; EdTech</h3>
+<ul>
+<li>AI-native learning management systems</li>
+<li>Real-time transcript processing</li>
+<li>Automated assessment and feedback</li>
+<li>Personalised learning path generation</li>
+<li>IDE synchronisation for coding education</li>
+<li><strong>Case Study</strong>: AntiGravity LMS — FastAPI backend, Supabase real-time sync, Gemini 1.5 Pro AI evaluation</li>
+</ul>
+<h3>Retail &amp; E-Commerce</h3>
+<ul>
+<li>Demand forecasting and inventory optimisation</li>
+<li>Personalised recommendation engines</li>
+<li>Customer churn prediction</li>
+<li>Automated listing generation</li>
+<li>Visual product inspection</li>
+</ul>
+<h3>Manufacturing &amp; Logistics</h3>
+<ul>
+<li>Predictive maintenance systems</li>
+<li>Computer vision quality control</li>
+<li>Supply chain optimisation models</li>
+<li>Route and logistics automation</li>
+<li>Demand planning AI</li>
+</ul>
+<h3>Real Estate &amp; PropTech</h3>
+<ul>
+<li>Automated listing descriptions and marketing</li>
+<li>Buyer matching and recommendation</li>
+<li>Property valuation models</li>
+<li>Lead scoring and nurturing automation</li>
+</ul>
+<hr />
+<h2>Proven Results (Social Proof)</h2>
+<p><strong>Track Record</strong>:<br />
+- 40+ AI projects delivered to production<br />
+- 3.2x average ROI within 12 months<br />
+- 92% client retention rate<br />
+- Millions of data points processed daily</p>
+<p><strong>Client Testimonials</strong>:</p>
+<blockquote>
+<p>"They didn't just build us a model — they helped us rethink how our entire team uses data. The impact was immediate and measurable." — Sarah Chen, VP of Data, Meridian Financial</p>
+<p>"Aiquire's team spoke both our boardroom and our engineering org's language. That's rare." — Marcus Rodriguez, COO, PulseRetail</p>
+<p>"Our patients can get instant answers at any hour, in their preferred language. The system has transformed how we communicate." — Dr. Rajesh B Iyer, Poorna Neuro</p>
+<p>"The AI co-pilot has revolutionised our operations. Agents are more confident, efficient, and empathetic." — Sarah Williams, Head of Customer Support</p>
+<p>"SipraHub's platform has completely transformed operations. We manage hundreds of manuscripts with complete visibility." — Dr Rajalakshmi, Principal Editor</p>
+</blockquote>
+<hr />
+<h2>Common Objections &amp; Answers</h2>
+<h3>"We've tried AI before and it didn't work."</h3>
+<p><strong>Answer</strong>: 85% of AI projects fail — almost always because the wrong problem was chosen, not because of bad technology. Our Double Diamond process spends two weeks on problem definition before writing a single line of code. We model ROI for every use case before we commit.</p>
+<h3>"We're not big enough for enterprise AI."</h3>
+<p><strong>Answer</strong>: Our Packaged Solutions start at $197/month. Our Discovery Sprints are 2–4 weeks. We serve companies from 15 employees to enterprise scale — and mid-market is our sweet spot.</p>
+<h3>"We don't have enough data."</h3>
+<p><strong>Answer</strong>: Data readiness is one of the first things we assess. Many companies have more usable data than they think — and we've delivered production systems with surprisingly lean datasets. Our AI Readiness Assessment tells you exactly where you stand.</p>
+<h3>"How do we know the ROI is real?"</h3>
+<p><strong>Answer</strong>: We model ROI before we build, track it during delivery, and measure it after launch. Our 3.2x average ROI figure comes from 40+ production systems with agreed KPIs, not projections.</p>
+<h3>"Will this create vendor dependency?"</h3>
+<p><strong>Answer</strong>: No. We work in your cloud environment, in your codebase, with your team. Everything we build, you own. Knowledge transfer is part of every engagement so your team can maintain and extend the system after we hand it over.</p>
+<hr />
+<h2>Key Messaging for Content Creation</h2>
+<h3>Discovery Call CTAs</h3>
+<ul>
+<li>"Book a free 45-minute discovery call — leave with a clear picture of where AI can move the needle."</li>
+<li>"Skip the uncertainty. 30 minutes, no sales pitch, just honest AI advice for your business."</li>
+<li>"Book a free discovery call. We'll tell you honestly what AI can — and can't — do for your business right now."</li>
+</ul>
+<h3>Audit CTAs</h3>
+<ul>
+<li>"Get a Free AI Workflow Audit — we'll identify your highest-value AI opportunities."</li>
+<li>"Find out where AI could be saving your team hours every week."</li>
+</ul>
+<h3>Pain Point → Solution Map</h3>
+<ul>
+<li><strong>"Our AI project stalled in proof-of-concept"</strong> → Pilot to Production methodology + MLOps included</li>
+<li><strong>"We can't afford McKinsey-level consulting"</strong> → Mid-market pricing + Packaged Solutions from $197/month</li>
+<li><strong>"We don't know where to start"</strong> → Free Discovery Call + AI Readiness Assessment</li>
+<li><strong>"Our team won't adopt new tools"</strong> → Change management + AI Academy built into every engagement</li>
+<li><strong>"We're worried about vendor lock-in"</strong> → Cloud-agnostic, everything you own, full knowledge transfer</li>
+</ul>
+<hr />
+<p><em>Note: Update this document as new services launch, case studies are published, or pricing changes. Keep messaging aligned with the current website and homepage copy at https://aiquire.siprahub.com</em></p>`, "internal-links-map.md": `<h1>Aiquire Internal Links Map</h1>
+<p>This document catalogs key Aiquire pages that should be referenced in blog content for strategic internal linking. Use this as the go-to reference when adding internal links to articles.</p>
+<p><strong>Base URL</strong>: https://aiquire.siprahub.com</p>
+<hr />
+<h2>Homepage &amp; Core Pages</h2>
+<h3>Homepage</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com</li>
+<li><strong>When to Link</strong>: When referencing Aiquire broadly, or as a final CTA at article end</li>
+<li><strong>Anchor Text Examples</strong>: "Aiquire", "AI consulting and engineering team", "our team"</li>
+</ul>
+<h3>Contact / Discovery Call</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/contact</li>
+<li><strong>When to Link</strong>: In all CTAs — after presenting a problem we solve, at article conclusion</li>
+<li><strong>Anchor Text Examples</strong>: "book a free discovery call", "talk to our team", "schedule a call"</li>
+</ul>
+<h3>Free AI Workflow Audit</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/audit</li>
+<li><strong>When to Link</strong>: When article covers AI readiness, workflow assessment, or identifying AI opportunities</li>
+<li><strong>Anchor Text Examples</strong>: "free AI workflow audit", "audit your AI readiness", "get your free audit"</li>
+</ul>
+<h3>About / Why Aiquire</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/about (verify URL)</li>
+<li><strong>When to Link</strong>: When discussing Aiquire's background, methodology, team credentials</li>
+<li><strong>Anchor Text Examples</strong>: "our team", "why clients choose us", "Aiquire's approach"</li>
+</ul>
+<h3>Case Studies</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/case-studies</li>
+<li><strong>When to Link</strong>: When claiming results, after mentioning proof points, any "real results" claim</li>
+<li><strong>Anchor Text Examples</strong>: "see our case studies", "real-world results", "how we've done this in practice"</li>
+</ul>
+<h3>Our Approach (Double Diamond)</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/approach</li>
+<li><strong>When to Link</strong>: When discussing AI project methodology, why projects fail, how to structure an AI initiative</li>
+<li><strong>Anchor Text Examples</strong>: "our Double Diamond methodology", "how we approach AI projects", "our process"</li>
+</ul>
+<h3>Industries</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/industries</li>
+<li><strong>When to Link</strong>: When covering industry-specific AI, or mentioning the sectors we serve</li>
+<li><strong>Anchor Text Examples</strong>: "industries we serve", "healthcare AI", "financial services AI"</li>
+</ul>
+<h3>All Services</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/services</li>
+<li><strong>When to Link</strong>: When listing service overview or at end of specific service content</li>
+<li><strong>Anchor Text Examples</strong>: "all our AI services", "see what we build", "our full service offering"</li>
+</ul>
+<hr />
+<h2>Service Pages</h2>
+<h3>AI Strategy &amp; Business Consulting</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/services/ai-strategy-consulting</li>
+<li><strong>When to Link</strong>: Articles about AI strategy, AI roadmaps, AI readiness, ROI modelling, why AI projects fail, AI governance, change management</li>
+<li><strong>Anchor Text Examples</strong>: "AI strategy consulting", "our AI strategy practice", "AI readiness assessment", "AI roadmap service"</li>
+</ul>
+<h3>AI/ML Development</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/services/ai-ml-development</li>
+<li><strong>When to Link</strong>: Articles about custom ML, predictive analytics, NLP, computer vision, model development, training on proprietary data</li>
+<li><strong>Anchor Text Examples</strong>: "custom ML development", "AI/ML development services", "predictive analytics", "machine learning development"</li>
+</ul>
+<h3>Generative AI &amp; LLM Solutions</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/services/generative-ai-llm</li>
+<li><strong>When to Link</strong>: Articles about LLMs, ChatGPT alternatives, RAG systems, conversational AI, AI agents, fine-tuning, prompt engineering at scale</li>
+<li><strong>Anchor Text Examples</strong>: "generative AI development", "LLM solutions", "RAG pipeline development", "custom AI agents", "conversational AI"</li>
+</ul>
+<h3>AI-Powered Software Development</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/services/ai-powered-software</li>
+<li><strong>When to Link</strong>: Articles about AI software products, intelligent apps, workflow automation, AI integration, building AI-native products</li>
+<li><strong>Anchor Text Examples</strong>: "AI-powered software development", "AI workflow automation", "AI integration services", "intelligent application development"</li>
+</ul>
+<h3>MLOps &amp; AI Infrastructure</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/services/mlops-infrastructure</li>
+<li><strong>When to Link</strong>: Articles about MLOps, model deployment, model monitoring, ML in production, data drift, CI/CD for ML, cloud AI infrastructure</li>
+<li><strong>Anchor Text Examples</strong>: "MLOps services", "AI infrastructure", "model monitoring", "ML deployment", "production AI operations"</li>
+</ul>
+<h3>AI Academy &amp; Training</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/services/ai-academy</li>
+<li><strong>When to Link</strong>: Articles about AI adoption, AI training programmes, building internal AI capability, AI change management, AI champions</li>
+<li><strong>Anchor Text Examples</strong>: "AI training programmes", "AI Academy", "build internal AI capability", "AI adoption training", "AI Champions Programme"</li>
+</ul>
+<h3>Packaged AI Solutions</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/services/packaged-solutions</li>
+<li><strong>When to Link</strong>: Articles about AI automation for SMEs, content repurposing, real estate AI, client onboarding automation, starting with AI on a budget</li>
+<li><strong>Anchor Text Examples</strong>: "packaged AI solutions", "pre-built AI automation", "AI automation packages", "content repurposing AI"</li>
+</ul>
+<h3>Claude Training Practice</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/claude-training</li>
+<li><strong>When to Link</strong>: Articles about Claude.ai, Claude Code, Anthropic tools, enterprise AI productivity, prompt engineering training</li>
+<li><strong>Anchor Text Examples</strong>: "Claude training", "Claude Code training", "Claude Cowork training", "enterprise Claude deployment"</li>
+</ul>
+<hr />
+<h2>Individual Case Studies</h2>
+<h3>Poorna Neuro — Healthcare AI Assistant (Dhi)</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/case-studies (filter/anchor to healthcare)</li>
+<li><strong>When to Link</strong>: Healthcare AI articles, multilingual AI, patient communication, voice AI, conversational AI use cases</li>
+<li><strong>Anchor Text Examples</strong>: "how we built Dhi for Poorna Neuro", "healthcare AI case study", "multilingual patient assistant"</li>
+<li><strong>Key Stats</strong>: 40% staff time freed, 6 regional languages, 24/7 availability</li>
+</ul>
+<h3>Insurance AI Co-pilot</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/case-studies (filter/anchor to insurance)</li>
+<li><strong>When to Link</strong>: Insurance AI, customer service AI, sentiment analysis, agent productivity, service desk AI articles</li>
+<li><strong>Anchor Text Examples</strong>: "insurance AI co-pilot case study", "how we reduced resolution time by 30%", "customer service AI"</li>
+<li><strong>Key Stats</strong>: 30% resolution time reduction, 45% satisfaction improvement, 50% training cost reduction</li>
+</ul>
+<h3>ContentConcepts Editorial Platform</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/case-studies (filter/anchor to publishing)</li>
+<li><strong>When to Link</strong>: Publishing AI, workflow automation, editorial management, document tracking, role-based access articles</li>
+<li><strong>Anchor Text Examples</strong>: "editorial management platform case study", "publishing workflow automation", "manuscript management AI"</li>
+<li><strong>Key Stats</strong>: 3 user roles, 7 email templates, 100% workflow automation</li>
+</ul>
+<h3>AntiGravity LMS</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/case-studies (filter/anchor to education)</li>
+<li><strong>When to Link</strong>: EdTech AI, LMS development, asynchronous AI, Google Gemini integrations, education platform articles</li>
+<li><strong>Anchor Text Examples</strong>: "AI-powered LMS case study", "education AI platform", "async AI learning system"</li>
+<li><strong>Key Stats</strong>: FastAPI, Supabase, Gemini 1.5 Pro, Celery/Redis async architecture</li>
+</ul>
+<hr />
+<h2>Blog / Content Hub</h2>
+<h3>Blog Index</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/blog</li>
+<li><strong>When to Link</strong>: When recommending further reading or pointing to Aiquire's knowledge hub</li>
+<li><strong>Anchor Text Examples</strong>: "our blog", "Aiquire insights", "further reading"</li>
+</ul>
+<h3>What is MLOps</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/blog/what-is-mlops</li>
+<li><strong>When to Link</strong>: MLOps articles, production ML, model deployment, AI infrastructure content</li>
+<li><strong>Anchor Text Examples</strong>: "what MLOps means", "MLOps explained", "managing ML in production"</li>
+</ul>
+<h3>AI vs Machine Learning vs Deep Learning</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/blog/ai-vs-machine-learning-vs-deep-learning</li>
+<li><strong>When to Link</strong>: Introductory AI content, explaining AI terminology, articles for non-technical audiences</li>
+<li><strong>Anchor Text Examples</strong>: "the difference between AI and machine learning", "AI vs ML explained"</li>
+</ul>
+<h3>What is Generative AI</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/blog/what-is-generative-ai</li>
+<li><strong>When to Link</strong>: Generative AI introductory content, LLM explainers, content for AI-curious executives</li>
+<li><strong>Anchor Text Examples</strong>: "what generative AI is", "how generative AI works", "generative AI explained"</li>
+</ul>
+<h3>AI Development Process Explained</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/blog/ai-development-process-explained</li>
+<li><strong>When to Link</strong>: Articles about AI project process, how to build AI, AI development lifecycle</li>
+<li><strong>Anchor Text Examples</strong>: "how AI development works", "the AI development process", "building AI step by step"</li>
+</ul>
+<h3>How AI is Transforming Businesses</h3>
+<ul>
+<li><strong>URL</strong>: https://aiquire.siprahub.com/blog/how-ai-is-transforming-businesses</li>
+<li><strong>When to Link</strong>: Business AI adoption articles, AI ROI content, industry transformation articles</li>
+<li><strong>Anchor Text Examples</strong>: "how AI is transforming businesses", "AI business transformation", "AI impact on operations"</li>
+</ul>
+<hr />
+<h2>Quick Reference by Topic</h2>
+<p><strong>When writing about AI strategy / roadmaps</strong>, link to:<br />
+- https://aiquire.siprahub.com/services/ai-strategy-consulting — AI strategy service<br />
+- https://aiquire.siprahub.com/approach — Double Diamond methodology<br />
+- https://aiquire.siprahub.com/contact — discovery call CTA</p>
+<p><strong>When writing about machine learning / custom models</strong>, link to:<br />
+- https://aiquire.siprahub.com/services/ai-ml-development — ML development service<br />
+- https://aiquire.siprahub.com/services/mlops-infrastructure — production/MLOps<br />
+- https://aiquire.siprahub.com/case-studies — proof via case studies</p>
+<p><strong>When writing about generative AI / LLMs / ChatGPT</strong>, link to:<br />
+- https://aiquire.siprahub.com/services/generative-ai-llm — Gen AI service<br />
+- https://aiquire.siprahub.com/blog/what-is-generative-ai — explainer<br />
+- https://aiquire.siprahub.com/claude-training — Claude-specific training</p>
+<p><strong>When writing about MLOps / production AI</strong>, link to:<br />
+- https://aiquire.siprahub.com/services/mlops-infrastructure — MLOps service<br />
+- https://aiquire.siprahub.com/blog/what-is-mlops — MLOps explainer<br />
+- https://aiquire.siprahub.com/services/ai-ml-development — ML development</p>
+<p><strong>When writing about AI for healthcare</strong>, link to:<br />
+- https://aiquire.siprahub.com/industries — industries page<br />
+- https://aiquire.siprahub.com/case-studies — Poorna Neuro case study<br />
+- https://aiquire.siprahub.com/services/generative-ai-llm — conversational AI</p>
+<p><strong>When writing about AI for financial services / insurance</strong>, link to:<br />
+- https://aiquire.siprahub.com/industries — industries page<br />
+- https://aiquire.siprahub.com/case-studies — insurance co-pilot case study<br />
+- https://aiquire.siprahub.com/services/ai-ml-development — custom ML</p>
+<p><strong>When writing about AI training / adoption</strong>, link to:<br />
+- https://aiquire.siprahub.com/services/ai-academy — AI Academy<br />
+- https://aiquire.siprahub.com/claude-training — Claude Training Practice<br />
+- https://aiquire.siprahub.com/contact — book a training call</p>
+<p><strong>When writing about AI automation / workflow</strong>, link to:<br />
+- https://aiquire.siprahub.com/services/packaged-solutions — Packaged Solutions<br />
+- https://aiquire.siprahub.com/services/ai-powered-software — AI software dev<br />
+- https://aiquire.siprahub.com/audit — free AI workflow audit</p>
+<p><strong>When writing about why AI projects fail</strong>, link to:<br />
+- https://aiquire.siprahub.com/approach — our methodology<br />
+- https://aiquire.siprahub.com/services/ai-strategy-consulting — strategy-first approach<br />
+- https://aiquire.siprahub.com/case-studies — proof of production success</p>
+<p><strong>When writing introductory / educational AI content</strong>, link to:<br />
+- https://aiquire.siprahub.com/blog/ai-vs-machine-learning-vs-deep-learning — terminology<br />
+- https://aiquire.siprahub.com/blog/what-is-generative-ai — gen AI basics<br />
+- https://aiquire.siprahub.com/blog/ai-development-process-explained — how AI is built</p>
+<hr />
+<h2>Internal Linking Best Practices for Aiquire Content</h2>
+<ol>
+<li><strong>Lead with the proof</strong>: Link to case studies when making any performance claim</li>
+<li><strong>Service page over homepage</strong>: Link to specific service pages (e.g., <code>/services/ai-ml-development</code>) rather than the homepage</li>
+<li><strong>CTA at natural close points</strong>: Every article should include a discovery call or audit link — placed after establishing the problem or at article end</li>
+<li><strong>3–5 links per post</strong>: Aim for 3–5 internal links; don't cluster them all at the end</li>
+<li><strong>Descriptive anchor text</strong>: "our MLOps service" beats "click here"; "how we reduced resolution time by 30%" beats "case study"</li>
+<li><strong>Update this map</strong>: Add new blog posts and case studies as they're published</li>
+</ol>
+<hr />
+<p><em>Keep this document updated as new case studies, service pages, and blog content are published. Last reviewed: March 2026.</em></p>`, "target-keywords.md": `<h1>Aiquire Target Keywords &amp; Topic Clusters</h1>
+<p>This document organises Aiquire's target keywords by topic cluster for strategic content planning and SEO optimisation. Update regularly based on keyword research and content performance.</p>
+<p><strong>Primary website</strong>: https://aiquire.siprahub.com<br />
+<strong>Blog</strong>: https://aiquire.siprahub.com/blog</p>
+<hr />
+<h2>Topic Cluster Structure</h2>
+<p>Each cluster has:<br />
+- <strong>Pillar Keyword</strong>: Main, higher-volume keyword (competitive — target with cornerstone content)<br />
+- <strong>Cluster Keywords</strong>: 5–10 related subtopic keywords<br />
+- <strong>Long-Tail Keywords</strong>: Specific, lower-competition phrases with strong commercial intent<br />
+- <strong>Search Intent</strong>: Informational (learn), Commercial (compare/evaluate), Transactional (ready to buy)</p>
+<hr />
+<h2>Cluster 1: AI Consulting Services</h2>
+<h3>Pillar Keyword</h3>
+<ul>
+<li><strong>Keyword</strong>: AI consulting services</li>
+<li><strong>Intent</strong>: Commercial / Transactional</li>
+<li><strong>Pillar Content URL</strong>: https://aiquire.siprahub.com/services (or dedicated pillar post)</li>
+</ul>
+<h3>Cluster Keywords</h3>
+<ol>
+<li><strong>AI consulting firm</strong> — Commercial intent, high value</li>
+<li><strong>AI consulting company</strong> — Commercial intent</li>
+<li><strong>artificial intelligence consulting</strong> — Commercial intent</li>
+<li><strong>AI strategy consulting</strong> — Commercial intent (direct service match)</li>
+<li><strong>AI business consulting</strong> — Commercial intent</li>
+<li><strong>enterprise AI consulting</strong> — Commercial intent, mid-funnel</li>
+<li><strong>AI implementation consulting</strong> — Transactional, high intent</li>
+<li><strong>AI consulting for startups</strong> — Niche commercial</li>
+</ol>
+<h3>Long-Tail Keywords</h3>
+<ul>
+<li>how to choose an AI consulting firm</li>
+<li>what does an AI consultant do</li>
+<li>AI consulting services for small business</li>
+<li>AI consulting ROI — is it worth it?</li>
+<li>how much does AI consulting cost</li>
+<li>AI consulting vs in-house AI team</li>
+<li>benefits of AI consulting</li>
+<li>AI consulting engagement models</li>
+<li>AI strategy consulting process</li>
+</ul>
+<h3>Related Questions (PAA)</h3>
+<ul>
+<li>What do AI consulting firms do?</li>
+<li>How much does AI consulting cost?</li>
+<li>When should a company hire an AI consultant?</li>
+<li>What is the difference between AI consulting and AI development?</li>
+<li>How do I evaluate AI consulting companies?</li>
+</ul>
+<hr />
+<h2>Cluster 2: Machine Learning Development</h2>
+<h3>Pillar Keyword</h3>
+<ul>
+<li><strong>Keyword</strong>: machine learning development services</li>
+<li><strong>Intent</strong>: Commercial / Transactional</li>
+<li><strong>Pillar Content URL</strong>: https://aiquire.siprahub.com/services/ai-ml-development</li>
+</ul>
+<h3>Cluster Keywords</h3>
+<ol>
+<li><strong>custom machine learning models</strong> — Transactional</li>
+<li><strong>ML model development</strong> — Commercial</li>
+<li><strong>predictive analytics services</strong> — Commercial</li>
+<li><strong>NLP development services</strong> — Commercial</li>
+<li><strong>computer vision AI</strong> — Commercial</li>
+<li><strong>machine learning for business</strong> — Informational/Commercial</li>
+<li><strong>AI model training services</strong> — Transactional</li>
+<li><strong>custom AI development</strong> — Transactional (broad, high value)</li>
+</ol>
+<h3>Long-Tail Keywords</h3>
+<ul>
+<li>how to build a custom machine learning model</li>
+<li>machine learning development process explained</li>
+<li>custom ML vs off-the-shelf AI tools</li>
+<li>predictive analytics for retail / healthcare / finance</li>
+<li>how long does it take to build an ML model</li>
+<li>machine learning model accuracy — what's realistic?</li>
+<li>NLP solutions for customer service</li>
+<li>computer vision for manufacturing quality control</li>
+<li>training ML models on proprietary data</li>
+</ul>
+<h3>Related Questions</h3>
+<ul>
+<li>How long does it take to develop a machine learning model?</li>
+<li>What's the difference between AI and machine learning?</li>
+<li>When do you need a custom ML model vs. an API?</li>
+<li>How much does custom ML development cost?</li>
+</ul>
+<hr />
+<h2>Cluster 3: Generative AI &amp; LLM Solutions</h2>
+<h3>Pillar Keyword</h3>
+<ul>
+<li><strong>Keyword</strong>: generative AI development services</li>
+<li><strong>Intent</strong>: Commercial / Transactional</li>
+<li><strong>Pillar Content URL</strong>: https://aiquire.siprahub.com/services/generative-ai-llm</li>
+</ul>
+<h3>Cluster Keywords</h3>
+<ol>
+<li><strong>LLM development</strong> — Commercial</li>
+<li><strong>RAG system development</strong> — Commercial (growing rapidly)</li>
+<li><strong>custom LLM solutions</strong> — Transactional</li>
+<li><strong>AI chatbot development</strong> — Commercial (competitive)</li>
+<li><strong>conversational AI development</strong> — Commercial</li>
+<li><strong>AI agent development</strong> — Commercial (emerging, growing)</li>
+<li><strong>generative AI for enterprise</strong> — Commercial</li>
+<li><strong>fine-tuning LLMs</strong> — Informational/Commercial</li>
+<li><strong>RAG vs fine-tuning</strong> — Informational</li>
+</ol>
+<h3>Long-Tail Keywords</h3>
+<ul>
+<li>how to build a RAG system for business</li>
+<li>generative AI implementation guide for enterprises</li>
+<li>custom GPT vs fine-tuned LLM — which do you need?</li>
+<li>AI hallucination risks and how to prevent them</li>
+<li>enterprise generative AI governance</li>
+<li>building AI agents for business processes</li>
+<li>retrieval-augmented generation explained</li>
+<li>how to implement RAG pipelines</li>
+<li>LLM for document processing</li>
+<li>generative AI for customer service</li>
+<li>conversational AI for healthcare</li>
+<li>AI agents vs traditional automation</li>
+</ul>
+<h3>Related Questions</h3>
+<ul>
+<li>What is RAG (retrieval-augmented generation)?</li>
+<li>How do you prevent AI hallucinations in enterprise deployments?</li>
+<li>When do you need a custom LLM vs. using the OpenAI API?</li>
+<li>What is an AI agent and how does it work?</li>
+<li>How much does generative AI development cost?</li>
+</ul>
+<hr />
+<h2>Cluster 4: MLOps &amp; AI in Production</h2>
+<h3>Pillar Keyword</h3>
+<ul>
+<li><strong>Keyword</strong>: MLOps services</li>
+<li><strong>Intent</strong>: Commercial</li>
+<li><strong>Pillar Content URL</strong>: https://aiquire.siprahub.com/services/mlops-infrastructure</li>
+<li><strong>Supporting Blog</strong>: https://aiquire.siprahub.com/blog/what-is-mlops</li>
+</ul>
+<h3>Cluster Keywords</h3>
+<ol>
+<li><strong>machine learning in production</strong> — Informational/Commercial</li>
+<li><strong>ML model monitoring</strong> — Commercial</li>
+<li><strong>model drift detection</strong> — Informational/Commercial</li>
+<li><strong>AI deployment services</strong> — Commercial</li>
+<li><strong>MLOps pipeline</strong> — Informational</li>
+<li><strong>cloud AI deployment</strong> — Commercial</li>
+<li><strong>ML CI/CD</strong> — Informational (technical)</li>
+<li><strong>AI infrastructure services</strong> — Commercial</li>
+</ol>
+<h3>Long-Tail Keywords</h3>
+<ul>
+<li>what is MLOps and why does it matter</li>
+<li>how to monitor machine learning models in production</li>
+<li>ML model drift — causes and how to fix it</li>
+<li>MLOps best practices for enterprise</li>
+<li>CI/CD pipeline for machine learning</li>
+<li>multi-cloud AI deployment strategy</li>
+<li>how to scale ML models in production</li>
+<li>GPU infrastructure for AI — build vs buy</li>
+<li>AI model performance degradation causes</li>
+<li>automated ML retraining pipelines</li>
+</ul>
+<h3>Related Questions</h3>
+<ul>
+<li>What is MLOps?</li>
+<li>Why do ML models fail in production?</li>
+<li>How do you monitor a deployed AI model?</li>
+<li>What causes model drift and how do you fix it?</li>
+<li>What cloud platform is best for AI workloads?</li>
+</ul>
+<hr />
+<h2>Cluster 5: AI Strategy &amp; Why AI Projects Fail</h2>
+<h3>Pillar Keyword</h3>
+<ul>
+<li><strong>Keyword</strong>: AI strategy for business</li>
+<li><strong>Intent</strong>: Informational / Commercial</li>
+<li><strong>Pillar Content URL</strong>: https://aiquire.siprahub.com/services/ai-strategy-consulting</li>
+</ul>
+<h3>Cluster Keywords</h3>
+<ol>
+<li><strong>why AI projects fail</strong> — Informational (high value, aligns with Aiquire messaging)</li>
+<li><strong>AI readiness assessment</strong> — Commercial</li>
+<li><strong>AI ROI</strong> — Informational/Commercial</li>
+<li><strong>AI roadmap</strong> — Informational/Commercial</li>
+<li><strong>AI governance</strong> — Informational</li>
+<li><strong>AI use case prioritisation</strong> — Informational</li>
+<li><strong>AI change management</strong> — Informational</li>
+<li><strong>how to build an AI strategy</strong> — Informational</li>
+</ol>
+<h3>Long-Tail Keywords</h3>
+<ul>
+<li>why most AI projects fail to reach production</li>
+<li>how to measure AI ROI</li>
+<li>AI readiness assessment checklist</li>
+<li>how to prioritise AI use cases</li>
+<li>building a responsible AI governance framework</li>
+<li>AI strategy vs AI implementation — what's the difference?</li>
+<li>how to get executive buy-in for AI projects</li>
+<li>AI project failure reasons and how to avoid them</li>
+<li>AI business case template</li>
+<li>AI change management best practices</li>
+<li>proof of concept vs production AI — bridging the gap</li>
+<li>double diamond methodology for AI</li>
+</ul>
+<h3>Related Questions</h3>
+<ul>
+<li>Why do most AI projects fail?</li>
+<li>How do you calculate the ROI of an AI project?</li>
+<li>What is an AI readiness assessment?</li>
+<li>How long does an AI strategy engagement take?</li>
+<li>What are the biggest barriers to AI adoption?</li>
+</ul>
+<hr />
+<h2>Cluster 6: AI Training &amp; Adoption</h2>
+<h3>Pillar Keyword</h3>
+<ul>
+<li><strong>Keyword</strong>: AI training for employees</li>
+<li><strong>Intent</strong>: Commercial</li>
+<li><strong>Pillar Content URL</strong>: https://aiquire.siprahub.com/services/ai-academy</li>
+</ul>
+<h3>Cluster Keywords</h3>
+<ol>
+<li><strong>AI upskilling</strong> — Commercial</li>
+<li><strong>enterprise AI training</strong> — Commercial</li>
+<li><strong>AI adoption for businesses</strong> — Commercial/Informational</li>
+<li><strong>AI literacy training</strong> — Commercial</li>
+<li><strong>Claude training</strong> — Commercial (growing, Aiquire differentiator)</li>
+<li><strong>prompt engineering training</strong> — Commercial</li>
+<li><strong>AI champions programme</strong> — Informational/Commercial</li>
+<li><strong>AI governance training</strong> — Commercial</li>
+</ol>
+<h3>Long-Tail Keywords</h3>
+<ul>
+<li>how to train employees on AI tools</li>
+<li>building internal AI capability in your organisation</li>
+<li>AI adoption challenges and solutions</li>
+<li>Claude training for business teams</li>
+<li>Claude Code training for developers</li>
+<li>how to develop AI champions in your company</li>
+<li>AI acceptable use policy — how to write one</li>
+<li>prompt engineering best practices for business</li>
+<li>AI literacy for executives and managers</li>
+<li>how to measure AI adoption success</li>
+</ul>
+<h3>Related Questions</h3>
+<ul>
+<li>How do you train employees to use AI effectively?</li>
+<li>What is an AI champions programme?</li>
+<li>How long does it take to build internal AI capability?</li>
+<li>What should an AI acceptable use policy include?</li>
+<li>How do you measure AI adoption?</li>
+</ul>
+<hr />
+<h2>Cluster 7: Industry-Specific AI</h2>
+<h3>Healthcare AI</h3>
+<p><strong>Pillar Keyword</strong>: AI in healthcare<br />
+- AI for patient communication<br />
+- healthcare chatbot<br />
+- multilingual AI healthcare<br />
+- clinical workflow automation<br />
+- medical NLP<br />
+- AI for appointment scheduling<br />
+- patient triage AI<br />
+- healthcare AI compliance</p>
+<p><strong>Long-Tail Keywords</strong>:<br />
+- AI to reduce administrative burden in healthcare<br />
+- multilingual patient AI assistant<br />
+- how hospitals use AI for patient communication<br />
+- AI for after-hours healthcare support<br />
+- voice AI for healthcare</p>
+<h3>Financial Services &amp; Insurance AI</h3>
+<p><strong>Pillar Keyword</strong>: AI for financial services<br />
+- AI for insurance<br />
+- insurance claims automation<br />
+- financial services AI compliance<br />
+- fraud detection AI<br />
+- AI for customer service in banking<br />
+- insurance chatbot<br />
+- AI co-pilot for service agents<br />
+- risk modelling AI</p>
+<p><strong>Long-Tail Keywords</strong>:<br />
+- how AI reduces insurance claim resolution time<br />
+- AI for insurance agent training<br />
+- AI sentiment analysis for customer service<br />
+- regulatory-compliant AI for financial services<br />
+- AI in underwriting</p>
+<h3>Retail &amp; E-Commerce AI</h3>
+<p><strong>Pillar Keyword</strong>: AI for retail<br />
+- demand forecasting AI<br />
+- AI for inventory management<br />
+- retail personalisation AI<br />
+- AI recommendation engine<br />
+- customer churn prediction retail<br />
+- AI for e-commerce</p>
+<h3>Manufacturing AI</h3>
+<p><strong>Pillar Keyword</strong>: AI in manufacturing<br />
+- predictive maintenance AI<br />
+- computer vision quality control<br />
+- AI for supply chain<br />
+- manufacturing defect detection<br />
+- industrial AI solutions</p>
+<hr />
+<h2>Cluster 8: AI Concepts &amp; Education (TOFU Content)</h2>
+<p>Content that targets researchers/learners and builds topical authority:</p>
+<h3>Informational Keyword Targets</h3>
+<ul>
+<li><strong>What is generative AI</strong> — https://aiquire.siprahub.com/blog/what-is-generative-ai</li>
+<li><strong>AI vs machine learning vs deep learning</strong> — https://aiquire.siprahub.com/blog/ai-vs-machine-learning-vs-deep-learning</li>
+<li><strong>What is MLOps</strong> — https://aiquire.siprahub.com/blog/what-is-mlops</li>
+<li><strong>What is a large language model (LLM)</strong> — to create</li>
+<li><strong>What is RAG (retrieval-augmented generation)</strong> — to create</li>
+<li><strong>What is AI agent</strong> — to create</li>
+<li><strong>How does machine learning work</strong> — to create</li>
+<li><strong>What is natural language processing</strong> — to create</li>
+<li><strong>What is computer vision</strong> — to create</li>
+<li><strong>How AI development process works</strong> — https://aiquire.siprahub.com/blog/ai-development-process-explained</li>
+<li><strong>AI ROI — how to measure it</strong> — to create</li>
+<li><strong>AI ethics and governance</strong> — to create</li>
+</ul>
+<hr />
+<h2>Competitor Keyword Gaps (To Monitor)</h2>
+<p>Keywords where AI consulting competitors rank but Aiquire currently doesn't:</p>
+<table>
+<thead>
+<tr>
+<th>Keyword</th>
+<th>Why It Matters</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AI consulting firms ranking</td>
+<td>High commercial intent</td>
+<td>Create comparison/positioning content</td>
+</tr>
+<tr>
+<td>AI implementation partner</td>
+<td>Transactional, high value</td>
+<td>Create dedicated landing page</td>
+</tr>
+<tr>
+<td>machine learning consulting</td>
+<td>Core service term</td>
+<td>Pillar content</td>
+</tr>
+<tr>
+<td>data science consulting</td>
+<td>Adjacent, high volume</td>
+<td>Create content</td>
+</tr>
+<tr>
+<td>AI for small business</td>
+<td>Underserved by big firms</td>
+<td>Create content targeting SMEs</td>
+</tr>
+<tr>
+<td>AI outsourcing</td>
+<td>Alternative buying term</td>
+<td>Create content</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Seasonal &amp; Trending Keywords</h2>
+<h3>2026 Priority Topics</h3>
+<ul>
+<li>Claude Code for enterprise / teams (growing rapidly — Aiquire differentiator)</li>
+<li>Claude Cowork training (January 2026 launch)</li>
+<li>Agentic AI / AI agents for business (fast-growing)</li>
+<li>AI governance and regulation (EU AI Act compliance)</li>
+<li>AI ROI measurement (board-level concern)</li>
+<li>AI for UAE / Middle East businesses (geographic targeting)</li>
+</ul>
+<h3>High-Growth Emerging Terms</h3>
+<ul>
+<li>Agentic AI</li>
+<li>AI co-pilot (beyond Microsoft Copilot branding)</li>
+<li>RAG systems / RAG pipeline</li>
+<li>AI orchestration</li>
+<li>Claude Code deployment</li>
+<li>MCP (Model Context Protocol)</li>
+</ul>
+<hr />
+<h2>LSI / Semantic Keywords for Aiquire Content</h2>
+<h3>Core AI Terms to Weave Into Content</h3>
+<ul>
+<li>machine learning, ML, deep learning, neural networks</li>
+<li>large language model, LLM, foundation model</li>
+<li>natural language processing, NLP</li>
+<li>computer vision, CV</li>
+<li>retrieval-augmented generation, RAG</li>
+<li>AI agent, autonomous agent, agentic AI</li>
+<li>MLOps, ModelOps, AIOps</li>
+<li>CI/CD pipeline, continuous integration, continuous deployment</li>
+<li>model drift, data drift, concept drift</li>
+<li>fine-tuning, prompt engineering, few-shot learning</li>
+</ul>
+<h3>Business/Outcome Terms</h3>
+<ul>
+<li>ROI, return on investment, business case</li>
+<li>production AI, AI in production, deployed AI</li>
+<li>proof of concept, POC, pilot</li>
+<li>AI readiness, data maturity, infrastructure readiness</li>
+<li>change management, AI adoption, technology adoption</li>
+<li>knowledge transfer, internal capability, upskilling</li>
+<li>vendor lock-in, cloud-agnostic, portability</li>
+<li>Double Diamond, design thinking, human-centred design</li>
+</ul>
+<h3>Industry Terms by Sector</h3>
+<ul>
+<li><strong>Healthcare</strong>: clinical, patient, EHR, compliance, HIPAA, multilingual</li>
+<li><strong>Financial services</strong>: regulatory, compliance, risk, fraud, underwriting, claims</li>
+<li><strong>Retail</strong>: demand forecasting, inventory, personalisation, churn, conversion</li>
+<li><strong>Manufacturing</strong>: predictive maintenance, quality control, defect detection, OEE</li>
+<li><strong>Logistics</strong>: supply chain, route optimisation, fleet management</li>
+</ul>
+<hr />
+<h2>Usage Guidelines</h2>
+<h3>When Writing New Content</h3>
+<ol>
+<li>Check which cluster the topic belongs to</li>
+<li>Target the appropriate cluster or long-tail keyword</li>
+<li>Reference the pillar service page in that cluster</li>
+<li>Include LSI keywords naturally throughout</li>
+<li>Link to related cluster articles</li>
+</ol>
+<h3>When Planning Content Calendar</h3>
+<ol>
+<li>Prioritise TOFU educational content (builds topical authority fast)</li>
+<li>Build commercial intent content for each service area</li>
+<li>Publish one industry-specific piece per month</li>
+<li>Target "why AI fails" angle — directly supports Aiquire's messaging</li>
+</ol>
+<h3>Content Priority Matrix</h3>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Cluster</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Highest</td>
+<td>AI Consulting Services</td>
+<td>Direct buyer intent, maps to core service</td>
+</tr>
+<tr>
+<td>Highest</td>
+<td>Why AI Projects Fail</td>
+<td>Core brand message, thought leadership</td>
+</tr>
+<tr>
+<td>High</td>
+<td>Generative AI / LLM</td>
+<td>Fast-growing category, Aiquire expertise</td>
+</tr>
+<tr>
+<td>High</td>
+<td>Industry-specific (healthcare, finance)</td>
+<td>High value, case study proof exists</td>
+</tr>
+<tr>
+<td>High</td>
+<td>MLOps</td>
+<td>Differentiator vs pure consulting firms</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td>AI Training / Adoption</td>
+<td>Service differentiator, growing demand</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td>AI Concepts (TOFU)</td>
+<td>Topical authority building</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td>Claude Training</td>
+<td>Unique Aiquire differentiator</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>Last Updated</strong>: March 2026<br />
+<strong>Next Review</strong>: June 2026<br />
+<strong>Note</strong>: Update monthly with new keyword opportunities and quarterly with volume/difficulty data from Ahrefs or SEMrush.</p>`, "style-guide.md": `<h1>Aiquire Style Guide</h1>
+<p>This guide defines writing conventions, formatting standards, and editorial guidelines for all Aiquire blog and marketing content.</p>
+<hr />
+<h2>Grammar &amp; Mechanics</h2>
+<h3>English Variant</h3>
+<p>Aiquire is a UAE-based company serving international clients. <strong>Use British/International English throughout.</strong></p>
+<table>
+<thead>
+<tr>
+<th>British (Use)</th>
+<th>American (Avoid)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>organisation</td>
+<td>organization</td>
+</tr>
+<tr>
+<td>programme</td>
+<td>program (except software programs)</td>
+</tr>
+<tr>
+<td>optimise</td>
+<td>optimize</td>
+</tr>
+<tr>
+<td>recognise</td>
+<td>recognize</td>
+</tr>
+<tr>
+<td>behaviour</td>
+<td>behavior</td>
+</tr>
+<tr>
+<td>modelled</td>
+<td>modeled</td>
+</tr>
+<tr>
+<td>customisation</td>
+<td>customization</td>
+</tr>
+<tr>
+<td>labour</td>
+<td>labor</td>
+</tr>
+<tr>
+<td>colour</td>
+<td>color</td>
+</tr>
+<tr>
+<td>analyse</td>
+<td>analyze</td>
+</tr>
+<tr>
+<td>realise</td>
+<td>realize</td>
+</tr>
+<tr>
+<td>practise (verb)</td>
+<td>practice (verb)</td>
+</tr>
+</tbody>
+</table>
+<p><em>Note: "practice" (noun) is the same in both variants.</em></p>
+<h3>Capitalization</h3>
+<p><strong>Headlines &amp; Subheadings</strong>: Sentence case (only first word and proper nouns capitalised)<br />
+- ✅ "Why most AI projects fail before they begin"<br />
+- ❌ "Why Most AI Projects Fail Before They Begin"</p>
+<p><strong>Product/Service Names</strong>:<br />
+- Aiquire (always capitalised, never "aiquire")<br />
+- SipraHub (always capitalised)<br />
+- Claude (capitalised — it's Anthropic's product name)<br />
+- Claude Code (capitalised)<br />
+- Claude Cowork (capitalised)<br />
+- Double Diamond (capitalised — proper methodology name)<br />
+- AI Academy (capitalised as Aiquire's programme name)<br />
+- AI Champions Programme (capitalised as named programme)</p>
+<p><strong>Industry Terms</strong>:<br />
+- AI (always caps — it's an acronym)<br />
+- ML (always caps)<br />
+- LLM (always caps)<br />
+- NLP (always caps)<br />
+- RAG (always caps)<br />
+- MLOps (capitalised as written — "L" lowercase)<br />
+- API (always caps)<br />
+- ROI (always caps)<br />
+- KPI (always caps)</p>
+<h3>Numbers</h3>
+<p><strong>When to spell out</strong>: One through nine<br />
+<strong>Use numerals for</strong>: 10 and above, percentages, money, measurements, statistics</p>
+<ul>
+<li>✅ "three AI projects" / "12 months" / "40+ production systems"</li>
+<li>✅ "30% reduction" / "$197/month" / "3.2x ROI"</li>
+<li>✅ "six regional languages" / "four engagement models"</li>
+</ul>
+<p><strong>Large numbers</strong>:<br />
+- 1 million (not 1,000,000)<br />
+- $5K is acceptable for informal context; $5,000 for formal<br />
+- Use commas in numbers ≥ 1,000: 10,000 not 10000</p>
+<p><strong>Stats from Aiquire's track record</strong> (use exactly):<br />
+- 40+ AI projects delivered to production<br />
+- 3.2x average ROI within 12 months<br />
+- 92% client retention rate<br />
+- 85% of AI pilots never reach production<br />
+- 80%+ of enterprise AI projects never reach production</p>
+<h3>Punctuation</h3>
+<p><strong>Oxford Comma</strong>: Yes — always use it.<br />
+- ✅ "strategy, engineering, and deployment"<br />
+- ❌ "strategy, engineering and deployment"</p>
+<p><strong>Em Dashes</strong>: Use — with spaces on both sides — for parenthetical emphasis.<br />
+- ✅ "Most AI consultancies stop at the model — we build the full product."<br />
+- Format: space + em dash + space</p>
+<p><strong>Hyphens</strong>:<br />
+- AI-powered (hyphenated as compound adjective before noun)<br />
+- production-grade (hyphenated as compound adjective)<br />
+- full-stack (hyphenated)<br />
+- real-time (hyphenated as compound adjective)<br />
+- end-to-end (hyphenated)<br />
+- "AI powered software" when used predicatively (not as adjective): "the software is AI powered"</p>
+<p><strong>Quotation Marks</strong>: Use "double quotes" for quotations and titles.</p>
+<p><strong>Ellipses</strong>: Avoid except for quoting omitted text. Don't use as trailing dots for effect.</p>
+<p><strong>Colon usage</strong>: After a complete sentence introducing a list.<br />
+- ✅ "We deliver three things: speed, quality, and ownership."<br />
+- ❌ "We deliver: speed, quality, and ownership."</p>
+<h3>Abbreviations &amp; Acronyms</h3>
+<p><strong>First use</strong>: Spell out on first use, then acronym in parentheses thereafter.<br />
+- "Retrieval-augmented generation (RAG)" — then just "RAG"<br />
+- "machine learning (ML)" — then just "ML"<br />
+- Exception: Universally known acronyms (AI, ROI, API, URL, CTA) can be used from first mention.</p>
+<p><strong>Latin abbreviations</strong>: Avoid. Use plain English instead.<br />
+- "for example" not "e.g."<br />
+- "that is" not "i.e."<br />
+- "and so on" not "etc." (or just end the list)</p>
+<hr />
+<h2>Word Choice &amp; Usage</h2>
+<h3>Preferred Terms (Say This → Not That)</h3>
+<table>
+<thead>
+<tr>
+<th>Say This</th>
+<th>Not That</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>production AI</td>
+<td>AI deployment</td>
+<td>"Production" is our standard — own the language</td>
+</tr>
+<tr>
+<td>ship / build / deliver</td>
+<td>create, make</td>
+<td>Stronger, more engineering-specific verbs</td>
+</tr>
+<tr>
+<td>business outcome</td>
+<td>result, deliverable</td>
+<td>More specific to client value</td>
+</tr>
+<tr>
+<td>organisation</td>
+<td>company (when referring to enterprise)</td>
+<td>British English + more formal</td>
+</tr>
+<tr>
+<td>programme</td>
+<td>program</td>
+<td>British English (unless software)</td>
+</tr>
+<tr>
+<td>machine learning (ML)</td>
+<td>artificial intelligence (AI)</td>
+<td>Be precise — use the correct term</td>
+</tr>
+<tr>
+<td>generative AI</td>
+<td>Gen AI (in formal copy)</td>
+<td>Spell out in headings and formal contexts</td>
+</tr>
+<tr>
+<td>return on investment (ROI)</td>
+<td>value, savings</td>
+<td>ROI is the language the C-suite uses</td>
+</tr>
+<tr>
+<td>modelled ROI</td>
+<td>projected ROI</td>
+<td>We model before we build — own that distinction</td>
+</tr>
+<tr>
+<td>we build</td>
+<td>we develop/create</td>
+<td>Builders own what they make</td>
+</tr>
+<tr>
+<td>proof of concept</td>
+<td>POC (first mention)</td>
+<td>Spell out then abbreviate</td>
+</tr>
+<tr>
+<td>use case</td>
+<td>application, scenario</td>
+<td>Industry-standard term</td>
+</tr>
+<tr>
+<td>hallucination (AI)</td>
+<td>"mistake", "error"</td>
+<td>Use correct technical term with explanation</td>
+</tr>
+</tbody>
+</table>
+<h3>Words to Avoid</h3>
+<p><strong>Hype words</strong> (empty and overused):<br />
+- revolutionary, transformative, game-changing<br />
+- cutting-edge, state-of-the-art, next-generation<br />
+- innovative, pioneering, groundbreaking<br />
+- leverage (use "use" instead)<br />
+- synergy, synergistic<br />
+- holistic, robust (avoid unless genuinely accurate)<br />
+- seamlessly, effortlessly</p>
+<p><strong>Vague filler</strong>:<br />
+- very, really, truly, actually, basically<br />
+- utilize (use "use")<br />
+- implement (use "build", "deploy", or "run")<br />
+- solution (when used generically — "AI solutions" means nothing)</p>
+<p><strong>Passive voice constructions</strong> (prefer active):<br />
+- ❌ "A model was built by our team" → ✅ "Our team built a model"<br />
+- ❌ "ROI is delivered" → ✅ "We deliver ROI"</p>
+<h3>Inclusive Language</h3>
+<ul>
+<li>Gender-neutral language throughout ("they" when pronoun needed)</li>
+<li>"executives" / "leaders" not gendered terms</li>
+<li>Be mindful of idioms that may not translate internationally (Aiquire serves Middle East, Asia, Europe)</li>
+<li>Avoid Western-centric cultural references</li>
+</ul>
+<hr />
+<h2>Formatting Standards</h2>
+<h3>Text Formatting</h3>
+<p><strong>Bold</strong>:<br />
+- Key concepts, statistics, important takeaways<br />
+- Sparingly — if everything is bold, nothing stands out<br />
+- ✅ "<strong>3.2x average ROI</strong> within 12 months"<br />
+- ✅ "<strong>85% of AI pilots</strong> never reach production"</p>
+<p><strong>Italics</strong>:<br />
+- Emphasis where bold would be too heavy<br />
+- Titles of external publications<br />
+- Technical terms on first use if unusual<br />
+- Use sparingly</p>
+<p><strong>Underline</strong>: Never (reserved for links only)</p>
+<p><strong>ALL CAPS</strong>: Only for standard acronyms (AI, ML, LLM, RAG, ROI, MLOps). Never for emphasis.</p>
+<h3>Lists</h3>
+<p><strong>Bulleted Lists</strong> (use for non-sequential items):<br />
+- Capitalise first word of each item<br />
+- Period if complete sentence; no punctuation if fragment<br />
+- Parallel structure — all sentence fragments OR all complete sentences, not mixed<br />
+- Maximum 7 items before splitting into sections</p>
+<p><strong>Numbered Lists</strong> (use for sequential steps, rankings, or ordered priorities):<br />
+- Same capitalisation and punctuation rules as bullets<br />
+- Ideal for process explanations (Discover → Define → Develop → Deliver)</p>
+<p><strong>Nested Lists</strong>:<br />
+- Maximum 2 levels deep<br />
+- Use sparingly — if you find yourself nesting deeply, restructure the content</p>
+<h3>Links</h3>
+<p><strong>Anchor Text</strong>:<br />
+- Descriptive and keyword-rich<br />
+- ✅ "our AI Strategy consulting practice"<br />
+- ✅ "how we reduced resolution time by 30%"<br />
+- ❌ "click here"<br />
+- ❌ "read more"<br />
+- ❌ "learn more" (too generic — add what they'll learn)</p>
+<p><strong>External links</strong>: Open in new tab<br />
+<strong>Internal links</strong>: Same tab</p>
+<h3>Code &amp; Technical Elements</h3>
+<p><strong>Inline code</strong>: Use backticks for file names, model names, technical strings<br />
+- <code>CLAUDE.md</code>, <code>FastAPI</code>, <code>requirements.txt</code></p>
+<p><strong>Technical terms</strong>: Define on first use, then use freely<br />
+- "Retrieval-augmented generation (RAG) — a technique that grounds LLM outputs in your specific data..."</p>
+<hr />
+<h2>Content Structure</h2>
+<h3>Article Introduction (150–250 words)</h3>
+<ol>
+<li><strong>Hook</strong> (1–2 sentences): A striking fact, challenge to conventional thinking, or bold claim</li>
+<li>✅ "85% of AI projects never reach production. Most fail for the same reason."</li>
+<li>✅ "Most AI consultants will show you an impressive demo. We care more about what happens six months later."</li>
+<li><strong>Problem</strong> (2–3 sentences): What challenge does this article address?</li>
+<li><strong>Promise</strong> (1–2 sentences): What will the reader know or be able to do after reading?</li>
+<li><strong>Primary keyword</strong>: Must appear in first 100 words</li>
+</ol>
+<p><strong>Avoid</strong>:<br />
+- Starting with "In today's rapidly evolving AI landscape..."<br />
+- Starting with "Artificial intelligence is transforming..."<br />
+- Weak openings that don't immediately challenge or engage</p>
+<h3>Section Length</h3>
+<ul>
+<li><strong>Minimum</strong>: 150 words per H2 section</li>
+<li><strong>Maximum</strong>: 500 words (break into H3 subsections if longer)</li>
+<li><strong>Ideal</strong>: 250–350 words per main section</li>
+</ul>
+<h3>Conclusion (150–250 words)</h3>
+<ol>
+<li><strong>Recap</strong> (3–5 bullet points or short paragraph): Key takeaways</li>
+<li><strong>So what?</strong>: What should the reader do with this information?</li>
+<li><strong>CTA</strong> (1–2 sentences): Contextual call-to-action</li>
+<li>After educational content: "If you're evaluating where AI belongs in your business, our free discovery call is the fastest way to find out."</li>
+<li>After case study content: "Ready to see results like this? Book a free discovery call."</li>
+<li>After service content: "Get a free AI Workflow Audit to identify where we can help."</li>
+</ol>
+<hr />
+<h2>SEO-Specific Style</h2>
+<h3>Meta Titles (50–60 characters)</h3>
+<ul>
+<li>Include primary keyword</li>
+<li>Sentence case</li>
+<li>No trailing "| Aiquire" unless space allows</li>
+<li>Benefit-focused or question-based</li>
+</ul>
+<p><strong>Format options</strong>:<br />
+- <code>[Primary Keyword]: [Benefit/Promise]</code><br />
+- <code>How to [Goal Without [Common Mistake]</code><br />
+- <code>Why [Provocative Claim]: [Context]</code></p>
+<p><strong>Examples</strong>:<br />
+- ✅ "Why AI projects fail (and how to avoid it)" — 43 chars<br />
+- ✅ "MLOps explained: keeping AI alive in production" — 47 chars<br />
+- ✅ "AI consulting services: what to look for" — 41 chars<br />
+- ❌ "The Ultimate Comprehensive Guide to Everything About AI Strategy for Enterprise" (too long)<br />
+- ❌ "AI tips" (too vague)</p>
+<h3>Meta Descriptions (150–160 characters)</h3>
+<ul>
+<li>Include primary keyword naturally</li>
+<li>Clear value proposition</li>
+<li>End with a CTA phrase</li>
+<li>Complete sentence — never cut off mid-thought</li>
+</ul>
+<p><strong>Formula</strong>: <code>[Problem/Question]? [Solution]. [Unique angle]. [CTA].</code></p>
+<p><strong>Examples</strong>:<br />
+- ✅ "85% of AI projects fail before reaching production. Learn why — and how to structure your initiative to be in the 15% that ship. Book a free call." (153 chars)<br />
+- ✅ "What is MLOps and why does it matter? Plain-English guide to keeping ML models performing in production, from CI/CD to drift detection." (136 chars)</p>
+<h3>URL Slugs</h3>
+<ul>
+<li>Lowercase, hyphens between words</li>
+<li>Include primary keyword</li>
+<li>3–5 words ideal</li>
+<li>No stop words unless necessary</li>
+</ul>
+<p><strong>Format</strong>: <code>/blog/[primary-keyword-phrase]</code></p>
+<p><strong>Examples</strong>:<br />
+- ✅ <code>/blog/why-ai-projects-fail</code><br />
+- ✅ <code>/blog/what-is-mlops</code><br />
+- ✅ <code>/blog/generative-ai-for-enterprise</code><br />
+- ❌ <code>/blog/a-comprehensive-guide-to-understanding-machine-learning-in-2026</code></p>
+<h3>Alt Text for Images</h3>
+<ul>
+<li>Describe what the image shows (accessibility)</li>
+<li>Include keyword naturally where relevant</li>
+<li>Under 125 characters</li>
+<li>No "image of" or "photo of" prefix</li>
+</ul>
+<hr />
+<h2>Dates &amp; Time</h2>
+<p><strong>Date format</strong>: Day Month Year — "15 March 2026" (international standard, not US format)<br />
+<strong>Time</strong>: 12-hour with a.m./p.m. spacing: "3:00 p.m. GST"</p>
+<hr />
+<h2>Statistics &amp; Data</h2>
+<h3>Citing Sources</h3>
+<ul>
+<li>Always cite statistics</li>
+<li>Format: "According to [Source/Year], [statistic]."</li>
+<li>Link to original research when available</li>
+<li>Prefer data from last 2 years; flag older data</li>
+</ul>
+<h3>Aiquire's Own Stats (No Citation Needed — Attribute to Aiquire)</h3>
+<ul>
+<li>40+ AI projects delivered to production</li>
+<li>3.2x average ROI within 12 months</li>
+<li>92% client retention rate</li>
+</ul>
+<h3>External Stats to Reference (Common in AI Consulting Content)</h3>
+<ul>
+<li>85% of AI pilots never reach production (commonly cited industry figure)</li>
+<li>80%+ of enterprise AI projects fail (McKinsey, Gartner — verify and cite)</li>
+<li>400M+ businesses worldwide (industry stat)</li>
+</ul>
+<hr />
+<h2>Brand-Specific Guidelines</h2>
+<h3>Aiquire Product/Service References</h3>
+<p><strong>Company references</strong>:<br />
+- "Aiquire" — never "the Aiquire platform" (we're not a SaaS platform)<br />
+- "SipraHub" — parent company; reference when context requires it<br />
+- "our team" — don't say "Aiquire's team" in blog copy (first person is warmer)</p>
+<p><strong>Naming services in copy</strong>:<br />
+- AI Strategy &amp; Business Consulting (capitalise as a service name)<br />
+- AI/ML Development (with forward slash, no spaces)<br />
+- Generative AI &amp; LLM Solutions<br />
+- AI-Powered Software Development<br />
+- MLOps &amp; AI Infrastructure<br />
+- AI Academy (our training brand)<br />
+- Packaged AI Solutions<br />
+- Claude Training Practice</p>
+<p><strong>Methodology</strong>:<br />
+- The Double Diamond (capitalised; explain on first use in any article)<br />
+- Discover → Define → Develop → Deliver (four phases; always in this order)</p>
+<h3>Competitor References</h3>
+<ul>
+<li>Name competitors when relevant for context (Accenture, McKinsey, etc.) — be factual, never disparaging</li>
+<li>Use "other AI consulting firms" as a neutral collective when not naming specifically</li>
+<li>Focus on differentiation ("unlike typical strategy-only consultancies"), not criticism</li>
+</ul>
+<h3>Client/Case Study References</h3>
+<ul>
+<li>Always use client-approved name and title as in case study</li>
+<li>Don't extrapolate beyond what's in the case study</li>
+<li>Quote marks for direct quotes; paraphrase for general references</li>
+</ul>
+<hr />
+<h2>Accessibility</h2>
+<h3>Screen-Reader Friendly</h3>
+<ul>
+<li>Descriptive link text (never "click here")</li>
+<li>Alt text for all images</li>
+<li>Proper heading hierarchy: H1 → H2 → H3, never skip levels</li>
+<li>Table headers labelled clearly</li>
+</ul>
+<h3>Plain Language</h3>
+<ul>
+<li>8th–10th grade reading level</li>
+<li>Define technical terms on first use</li>
+<li>Short sentences (avg. 15–20 words)</li>
+<li>Short paragraphs (2–4 sentences)</li>
+</ul>
+<hr />
+<h2>Voice &amp; Tone Reminders</h2>
+<h3>Core Voice Characteristics</h3>
+<ol>
+<li><strong>Direct</strong>: Get to the point. Don't build up to the insight — lead with it.</li>
+<li><strong>Credible</strong>: Back claims with numbers. Show methodology. Reference proof.</li>
+<li><strong>Honest</strong>: Say what AI can't do as well as what it can. No empty promises.</li>
+<li><strong>Partnering</strong>: "We" with the client — not "we" vs. "them."</li>
+<li><strong>Outcome-focused</strong>: Always connect technology to business result.</li>
+</ol>
+<h3>Tone by Content Type</h3>
+<ul>
+<li><strong>Educational/how-to</strong>: Instructive, practical, clear — "Here's exactly how..."</li>
+<li><strong>Thought leadership</strong>: Challenging, confident, evidence-backed — "Most companies get this wrong..."</li>
+<li><strong>Case study</strong>: Factual, results-first, client-centric — "Here's what happened..."</li>
+<li><strong>Service pages</strong>: Benefit-first, honest, action-oriented — "Here's what you get..."</li>
+</ul>
+<hr />
+<h2>Editing Checklist</h2>
+<p>Before publishing:</p>
+<p><strong>Grammar &amp; Mechanics</strong>:<br />
+- [ ] British English used throughout (organisation, programme, optimise, etc.)<br />
+- [ ] Oxford commas in place<br />
+- [ ] Numbers formatted correctly<br />
+- [ ] Acronyms spelled out on first use</p>
+<p><strong>Style</strong>:<br />
+- [ ] Hype words removed<br />
+- [ ] Passive voice minimised<br />
+- [ ] Preferred terminology used<br />
+- [ ] Bold used sparingly and meaningfully</p>
+<p><strong>Structure</strong>:<br />
+- [ ] Hook within first 2 sentences<br />
+- [ ] Primary keyword in first 100 words<br />
+- [ ] Logical heading flow<br />
+- [ ] Conclusion with clear CTA</p>
+<p><strong>SEO</strong>:<br />
+- [ ] Keyword in H1, 2+ H2s, conclusion<br />
+- [ ] Meta title 50–60 characters<br />
+- [ ] Meta description 150–160 characters with CTA<br />
+- [ ] URL slug 3–5 words<br />
+- [ ] Images have alt text</p>
+<p><strong>Quality</strong>:<br />
+- [ ] All stats cited (Aiquire stats attributed, external linked)<br />
+- [ ] No broken links<br />
+- [ ] Genuinely useful — not just keyword-stuffed<br />
+- [ ] Sounds like Aiquire — direct, credible, outcome-focused</p>
+<hr />
+<p><strong>Style Guide Version</strong>: 1.0<br />
+<strong>Last Updated</strong>: March 2026<br />
+<strong>Next Review</strong>: September 2026</p>
+<p>This is a living document. Update as Aiquire's brand, services, and tone evolve.</p>`, "competitor-analysis.md": `<h1>Aiquire Competitor Analysis</h1>
+<p>This document tracks key competitors in the AI consulting, ML development, and enterprise AI services space. Use this when planning content to identify gaps, opportunities, and differentiation angles.</p>
+<p><strong>Update</strong>: Quarterly or when significant competitive shifts occur.<br />
+<strong>Last Updated</strong>: March 2026</p>
+<hr />
+<h2>Aiquire's Competitive Position</h2>
+<p><strong>Our sweet spot</strong>: Mid-market companies (15–500 employees) that need enterprise-grade AI capability without enterprise consulting budgets. We combine management consulting rigour with production ML engineering — a combination neither pure consultancies nor pure dev shops offer.</p>
+<p><strong>Our core differentiators</strong>:<br />
+1. Strategy + engineering in one team (no translation layer between deck and deploy)<br />
+2. Pilot-to-production focus (40+ production systems shipped)<br />
+3. Cloud-agnostic, no vendor lock-in<br />
+4. Transparent partnership model<br />
+5. Engagement models from $197/month (Packaged Solutions) to enterprise retainers</p>
+<hr />
+<h2>Primary Competitors</h2>
+<h3>Competitor 1: Accenture AI / Accenture Applied Intelligence</h3>
+<p><strong>Company Overview</strong>:<br />
+- <strong>Website</strong>: accenture.com/ai<br />
+- <strong>Primary Offering</strong>: Enterprise AI transformation — strategy, implementation, managed services<br />
+- <strong>Target Audience</strong>: Large enterprises, Fortune 500, government<br />
+- <strong>Pricing</strong>: Multi-million dollar engagements; minimum project sizes out of reach for mid-market<br />
+- <strong>Market Position</strong>: Market leader by revenue; brand recognition is strongest in large enterprise</p>
+<p><strong>Strengths</strong>:<br />
+- Enormous brand recognition and existing enterprise relationships<br />
+- Deep industry vertical expertise (finance, health, public sector)<br />
+- Global delivery capacity<br />
+- Partnership status with all major cloud vendors (AWS, Azure, GCP)</p>
+<p><strong>Weaknesses</strong>:<br />
+- Cost and minimum engagement size excludes mid-market<br />
+- Bureaucratic — slow to start, committee-driven decisions<br />
+- Often sub-contracts to smaller firms for actual delivery<br />
+- Consultant-heavy, less engineering depth for production systems<br />
+- Vendor lock-in risk through cloud partner agreements</p>
+<p><strong>Content Strategy</strong>:<br />
+- Heavy on thought leadership reports and whitepapers<br />
+- Publishes AI Index, research studies (earns media coverage and backlinks)<br />
+- Covers broad AI topics — less depth on specific technical implementations<br />
+- Very polished, corporate — no personality or candid voice</p>
+<p><strong>Content Gaps (Opportunities for Aiquire)</strong>:<br />
+- Honest "AI projects fail" content (they won't write it — could embarrass clients)<br />
+- Mid-market AI guides ("AI without a $5M budget")<br />
+- Practical technical how-tos (MLOps, RAG pipelines, AI agents)<br />
+- Case studies with real metrics for smaller companies</p>
+<p><strong>Aiquire Differentiation vs. Accenture</strong>:<br />
+- Accessible for mid-market<br />
+- Faster time-to-value (2–4 week Discovery Sprint vs. months of engagement setup)<br />
+- Direct delivery team — no sub-contracting<br />
+- No vendor lock-in through cloud partnerships</p>
+<hr />
+<h3>Competitor 2: McKinsey Digital / QuantumBlack (ML consultancy)</h3>
+<p><strong>Company Overview</strong>:<br />
+- <strong>Website</strong>: mckinsey.com/capabilities/quantumblack<br />
+- <strong>Primary Offering</strong>: AI and data science strategy and implementation; QuantumBlack is their ML arm<br />
+- <strong>Target Audience</strong>: Global enterprises, C-suite strategic advisory<br />
+- <strong>Pricing</strong>: Among the most expensive consulting firms globally<br />
+- <strong>Market Position</strong>: Premium brand; most credibility with boards and investors</p>
+<p><strong>Strengths</strong>:<br />
+- Unmatched brand prestige with board-level stakeholders<br />
+- Deep strategy and business transformation capability<br />
+- QuantumBlack's technical ML credibility<br />
+- Global research publishing machine (McKinsey Global Institute data drives enormous SEO)</p>
+<p><strong>Weaknesses</strong>:<br />
+- Pricing makes them inaccessible to 99% of businesses<br />
+- Strategy focus — often doesn't own implementation<br />
+- Slower cadence; not built for fast-moving AI market<br />
+- QuantumBlack engagements are rare and expensive</p>
+<p><strong>Content Strategy</strong>:<br />
+- McKinsey Insights and MGI reports generate massive organic traffic<br />
+- Heavy on economic impact studies ("The economic potential of generative AI")<br />
+- Thought leadership drives top-of-funnel, not conversion<br />
+- Long-form reports that earn thousands of backlinks</p>
+<p><strong>Content Gaps (Opportunities for Aiquire)</strong>:<br />
+- Tactical implementation guides (McKinsey publishes strategy, not how-tos)<br />
+- Small/mid-market AI content (McKinsey targets enterprise only)<br />
+- Honest ROI expectations for AI (McKinsey overpromises)<br />
+- Content for operations leaders, not just C-suite</p>
+<hr />
+<h3>Competitor 3: BCG X (BCG Gamma / BCG Digital Ventures)</h3>
+<p><strong>Company Overview</strong>:<br />
+- <strong>Website</strong>: bcg.com/x<br />
+- <strong>Primary Offering</strong>: AI and digital transformation — a hybrid of consulting and tech build<br />
+- <strong>Target Audience</strong>: Large enterprises<br />
+- <strong>Pricing</strong>: Premium consulting rates<br />
+- <strong>Market Position</strong>: Challenger to McKinsey/Accenture in AI space; strong brand</p>
+<p><strong>Strengths</strong>:<br />
+- "Build" capability — not just strategy advice (BCG X actually builds products)<br />
+- Strong AI research publishing (BCG Henderson Institute)<br />
+- Broad industry coverage<br />
+- Good reputation for generative AI strategy work</p>
+<p><strong>Weaknesses</strong>:<br />
+- Expensive and inaccessible for mid-market<br />
+- Large team size can mean slow delivery<br />
+- Less transparent on methodology and process</p>
+<p><strong>Content Gaps (Opportunities for Aiquire)</strong>:<br />
+- Technical depth (BCG X is still primarily consulting-first)<br />
+- Process transparency (share more of the "how" than BCG does)<br />
+- Mid-market content</p>
+<hr />
+<h3>Competitor 4: Boutique AI Consultancies (DataRobot, SAS, H2O.ai)</h3>
+<p><strong>Company Overview</strong>: Platform-first AI vendors who also offer consulting<br />
+- <strong>DataRobot</strong>: Automated ML platform + professional services<br />
+- <strong>SAS</strong>: Legacy analytics vendor with AI consultancy arm<br />
+- <strong>H2O.ai</strong>: Open-source ML platform with enterprise services</p>
+<p><strong>Strengths</strong>:<br />
+- Platform ownership means consulting is tied to their product suite<br />
+- Domain expertise in specific industries (SAS in financial, healthcare)</p>
+<p><strong>Weaknesses</strong>:<br />
+- <strong>Vendor lock-in</strong> — this is their business model; consulting supports platform sales<br />
+- Limited flexibility: recommendations will always favour their platform<br />
+- SAS and others are legacy vendors — slower to adopt modern stack<br />
+- Expensive licensing + consulting fees</p>
+<p><strong>Content Gaps (Opportunities for Aiquire)</strong>:<br />
+- "AI without vendor lock-in" angle — strong counter-position<br />
+- Modern stack content (LLMs, RAG, FastAPI, Supabase) — legacy vendors rarely write this<br />
+- Platform-agnostic recommendations</p>
+<hr />
+<h3>Competitor 5: Offshore ML Development Shops (Infosys AI, Wipro AI, TCS AI)</h3>
+<p><strong>Company Overview</strong>: Large offshore IT services firms with AI capability<br />
+- <strong>Target Audience</strong>: Enterprise seeking cost-effective AI implementation<br />
+- <strong>Pricing</strong>: Competitive (offshore rates) but large minimum engagements</p>
+<p><strong>Strengths</strong>:<br />
+- Cost-competitive for large-scale development<br />
+- Large teams with broad technology coverage<br />
+- Established relationships with large enterprise</p>
+<p><strong>Weaknesses</strong>:<br />
+- Little to no business consulting capability — take specs and build<br />
+- Communication and time zone challenges<br />
+- Quality inconsistency; high staff turnover<br />
+- No strategy depth — will build the wrong thing efficiently</p>
+<p><strong>Content Gaps (Opportunities for Aiquire)</strong>:<br />
+- Strategy-first angle ("don't build the wrong thing efficiently")<br />
+- Outcomes content (offshore shops publish very little thought leadership)<br />
+- Case study depth (offshore shops rarely publish detailed case studies)</p>
+<hr />
+<h3>Competitor 6: Freelance/Staff Augmentation Platforms (Toptal, Turing AI, Upwork)</h3>
+<p><strong>Company Overview</strong>: On-demand ML engineer sourcing<br />
+- <strong>Target Audience</strong>: Startups to mid-market needing ML talent<br />
+- <strong>Pricing</strong>: Hourly/project rates; no outcome guarantee</p>
+<p><strong>Strengths</strong>:<br />
+- Fast access to vetted talent<br />
+- Flexible engagement structure<br />
+- Lower commitment than full agency</p>
+<p><strong>Weaknesses</strong>:<br />
+- No consulting / strategy layer — you have to know what to build<br />
+- Individual contribution, not integrated team<br />
+- No methodology, no governance, no knowledge transfer<br />
+- Accountability for outcomes is on the client</p>
+<p><strong>Content Gaps (Opportunities for Aiquire)</strong>:<br />
+- "When you need more than a freelance ML engineer" angle<br />
+- Team vs. individual contributor comparisons<br />
+- Project management and accountability in AI development</p>
+<hr />
+<h2>Secondary Competitors / Content Publishers</h2>
+<p>These compete for organic search visibility in the AI space:</p>
+<h3>Publisher 1: Towards Data Science (Medium)</h3>
+<ul>
+<li><strong>Website</strong>: towardsdatascience.com</li>
+<li><strong>Focus</strong>: Technical AI/ML tutorials and articles</li>
+<li><strong>Why They Matter</strong>: Massive traffic; ranks for most technical AI terms</li>
+<li><strong>Content Approach</strong>: Practitioner-written, very technical, open publishing</li>
+<li><strong>Opportunity vs. Them</strong>: Business application of AI (ToDS is technical-first); combine technical depth with business context; case studies with client outcomes</li>
+</ul>
+<h3>Publisher 2: Analytics Vidhya</h3>
+<ul>
+<li><strong>Website</strong>: analyticsvidhya.com</li>
+<li><strong>Focus</strong>: Data science and ML tutorials, courses</li>
+<li><strong>Why They Matter</strong>: High domain authority; ranks for educational AI terms</li>
+<li><strong>Content Approach</strong>: Tutorial-heavy, skill-building</li>
+<li><strong>Opportunity vs. Them</strong>: Business strategy content; consulting perspective; "should you build this vs. buy" content</li>
+</ul>
+<h3>Publisher 3: IBM AI Blog / IBM Think</h3>
+<ul>
+<li><strong>Website</strong>: ibm.com/blog/ai</li>
+<li><strong>Focus</strong>: AI for enterprise — Watson platform, AI strategy</li>
+<li><strong>Why They Matter</strong>: High DA; ranks for enterprise AI terms</li>
+<li><strong>Content Approach</strong>: Product-adjacent thought leadership; tends to be generic</li>
+<li><strong>Opportunity vs. Them</strong>: More candid voice; less vendor-centric; specific case studies with real numbers</li>
+</ul>
+<h3>Publisher 4: Google Cloud AI Blog</h3>
+<ul>
+<li><strong>Website</strong>: cloud.google.com/blog/products/ai-machine-learning</li>
+<li><strong>Focus</strong>: Google AI products, Vertex AI, Gemini</li>
+<li><strong>Why They Matter</strong>: Very high authority; ranks for Google AI terms</li>
+<li><strong>Content Approach</strong>: Technical tutorials and product announcements</li>
+<li><strong>Opportunity vs. Them</strong>: Platform-agnostic content; vendor selection guides; implementation without lock-in</li>
+</ul>
+<h3>Publisher 5: MIT Sloan Management Review (AI content)</h3>
+<ul>
+<li><strong>Website</strong>: sloanreview.mit.edu (AI section)</li>
+<li><strong>Focus</strong>: Executive-level AI strategy and research</li>
+<li><strong>Why They Matter</strong>: High authority for business/strategy AI terms</li>
+<li><strong>Content Approach</strong>: Research-backed, academic-adjacent, C-suite audience</li>
+<li><strong>Opportunity vs. Them</strong>: More practical and actionable; less academic; speed to implementation</li>
+</ul>
+<hr />
+<h2>Competitive Keyword Analysis</h2>
+<h3>Keywords Competitors Dominate (Aiquire Priority Targets)</h3>
+<p><strong>"AI consulting services"</strong><br />
+- High commercial intent; very competitive<br />
+- Who ranks: Major consultancies + agency directories (Clutch, G2)<br />
+- Strategy: Create superior, outcome-focused pillar content; feature case studies prominently</p>
+<p><strong>"Why AI projects fail"</strong><br />
+- High informational value; directly aligns with Aiquire messaging<br />
+- Who ranks: McKinsey reports, Harvard Business Review, Gartner<br />
+- Strategy: Create the most honest, specific, practitioner-perspective article on this topic</p>
+<p><strong>"MLOps explained / what is MLOps"</strong><br />
+- Educational term; growing fast<br />
+- Who ranks: Databricks, Neptune.ai, TowardsDatScience<br />
+- Strategy: Aiquire's practitioner blog post + case study integration</p>
+<p><strong>"Custom machine learning development"</strong><br />
+- Commercial intent; growing<br />
+- Who ranks: Development agencies, Clutch listings<br />
+- Strategy: Service page optimisation + supporting blog content</p>
+<p><strong>"Generative AI for enterprise"</strong><br />
+- Fast-growing commercial term<br />
+- Who ranks: Gartner, McKinsey, major tech vendors<br />
+- Strategy: Business-focused guide with real implementation perspective</p>
+<p><strong>"RAG system / RAG pipeline"</strong><br />
+- Technical but growing commercial intent<br />
+- Who ranks: Pinecone, Llamaindex, Weaviate (vector DB vendors)<br />
+- Strategy: Vendor-agnostic guide from a consulting perspective</p>
+<hr />
+<h2>Competitive Content Patterns</h2>
+<h3>Topics All Competitors Cover (Table Stakes):</h3>
+<ol>
+<li>"What is [AI concept]" explainers — Aiquire differentiation: Add business application and real-world examples</li>
+<li>AI trends/predictions — Aiquire differentiation: Ground in real client patterns, not speculation</li>
+<li>Case studies — Aiquire differentiation: Real metrics, honest methodology, what went wrong too</li>
+</ol>
+<h3>Topics Competitors Avoid (Aiquire Opportunities):</h3>
+<ul>
+<li>"When NOT to use AI" — honest admission that builds trust</li>
+<li>"Why your AI vendor might be leading you wrong" — bold but impactful</li>
+<li>"What AI consulting actually costs" — pricing transparency</li>
+<li>Specific failure modes with root causes — no consultancy writes this about itself</li>
+</ul>
+<h3>Aiquire's Unique Content Angles (Unfair Advantage)</h3>
+<ol>
+<li><strong>The 85% failure rate frame</strong> — we name the problem that competitors caused</li>
+<li><strong>Honest pilot-to-production content</strong> — we ship real systems; write about what that actually involves</li>
+<li><strong>Claude expertise</strong> — Aiquire is one of few firms with dedicated Claude Training practice; own this content area</li>
+<li><strong>UAE/Middle East AI</strong> — underserved market geographically; own this content territory</li>
+<li><strong>Mid-market AI without Big 4 budgets</strong> — completely underserved audience in consulting content</li>
+</ol>
+<hr />
+<h2>Competitive Moats &amp; Advantages</h2>
+<h3>Their Unfair Advantages:</h3>
+<p><strong>McKinsey/BCG/Accenture</strong>: Brand prestige that takes decades to replicate. Board-level credibility.<br />
+- Counter-strategy: Outrank on technical and mid-market content; position as the team they'd hire to actually implement what the big firms strategise</p>
+<p><strong>TowardsDatScience</strong>: Domain authority built over years; practitioner trust.<br />
+- Counter-strategy: Business context + practitioner technical depth — combine what they separate</p>
+<p><strong>Google/IBM/AWS AI content</strong>: Domain authority from parent brands; unlimited content budget.<br />
+- Counter-strategy: Platform-agnostic perspective; "what a client actually sees" view</p>
+<h3>Aiquire's Unique Advantages:</h3>
+<ol>
+<li><strong>Strategy + engineering combined</strong> — no major competitor does both without hand-offs</li>
+<li><strong>Pilot to production track record</strong> — 40+ shipped systems is real proof</li>
+<li><strong>Candid voice</strong> — in a category full of corporate blandness, being direct stands out</li>
+<li><strong>Claude expertise</strong> — positioned as early leaders in Claude/Anthropic ecosystem</li>
+<li><strong>Mid-market focus</strong> — underserved by all major AI consultancies</li>
+</ol>
+<hr />
+<h2>Content Opportunity Matrix</h2>
+<h3>High Opportunity (Target First):</h3>
+<ol>
+<li>"Why AI projects fail" — aligns with brand, underserved from practitioner view</li>
+<li>"AI consulting services" — core commercial keyword, needs pillar content</li>
+<li>"MLOps for non-technical executives" — bridge gap between tech and business</li>
+<li>Industry AI guides (healthcare, insurance, manufacturing) — case study proof exists</li>
+<li>"AI for mid-market companies" — totally underserved audience</li>
+</ol>
+<h3>Medium Opportunity (Next Quarter):</h3>
+<ol>
+<li>"Custom ML vs. off-the-shelf AI" — commercial evaluation content</li>
+<li>"RAG systems explained" — growing fast, technical but applicable</li>
+<li>"AI ROI — how to measure it" — C-suite need, underserved</li>
+<li>"Claude for enterprise teams" — first-mover advantage</li>
+<li>"AI governance framework" — compliance and risk angle</li>
+</ol>
+<h3>Long-term Play (High competition, high value):</h3>
+<ol>
+<li>"AI consulting" (head term) — requires significant domain authority</li>
+<li>"Machine learning" (educational terms) — massive volume, hard to win</li>
+<li>"Generative AI" (head term) — dominated by major tech brands</li>
+</ol>
+<hr />
+<h2>Quarterly Competitive Review Schedule</h2>
+<p><strong>Monthly</strong>: Monitor top 3 content competitors (TowardsDatScience, IBM AI Blog, McKinsey Insights) for new content on core topics<br />
+<strong>Quarterly</strong>: Full competitive audit — ranking changes, new competitor content, shifts in keyword landscape<br />
+<strong>Bi-annually</strong>: Comprehensive competitor landscape assessment — new entrants, partnerships, acquisitions</p>
+<p><strong>Review Questions</strong>:<br />
+- Which competitors gained/lost rankings on our target keywords?<br />
+- What new content topics are competitors exploring?<br />
+- Have any new AI consulting boutiques emerged targeting our niche?<br />
+- What client objections are competitors addressing in their content?</p>
+<hr />
+<p><strong>Note</strong>: Competitive analysis is about understanding the landscape — not copying. Aiquire's content wins by being more honest, more specific, more technically credible, and more useful to mid-market decision-makers than any competitor currently manages. Always filter competitive insights through: "What would genuinely serve our audience best?"</p>
+<p><strong>Next Review</strong>: June 2026<br />
+<strong>Reviewer</strong>: [SEO/Content Owner]</p>`, "seo-guidelines.md": `<h1>SEO Guidelines for Aiquire Content</h1>
+<p>This document outlines SEO best practices and requirements for all Aiquire blog content to maximise organic search visibility and rankings.</p>
+<h2>Content Length Requirements</h2>
+<h3>Target Word Counts</h3>
+<ul>
+<li><strong>Standard Blog Post</strong>: 1,500-3,000 words (target: 2,000-2,500)</li>
+<li><strong>Pillar Content / Comprehensive Guides</strong>: 3,000-5,000 words maximum</li>
+<li><strong>How-To Guides</strong>: 1,500-2,500 words</li>
+<li><strong>News / Updates</strong>: 800-1,200 words (exception to standard)</li>
+</ul>
+<h3>Important Length Guidelines</h3>
+<ul>
+<li><strong>Maximum for most articles</strong>: 3,000 words</li>
+<li><strong>Maximum for pillar content</strong>: 5,000 words</li>
+<li>If a topic requires more than the maximum, break it into a series of related articles</li>
+<li>Aim for the lower end of ranges when possible—concise, focused content often performs better</li>
+</ul>
+<h3>Why Length Matters</h3>
+<ul>
+<li>Longer content typically ranks higher in search results</li>
+<li>More words = more opportunities for keyword integration and topic coverage</li>
+<li>Comprehensive content earns more backlinks and engagement</li>
+<li>Depth signals expertise and authority to search engines — critical for YMYL (Your Money Your Life) topics like AI consulting</li>
+</ul>
+<h3>Quality Over Quantity</h3>
+<ul>
+<li>Don't add fluff just to hit word counts</li>
+<li>Every section should provide genuine value</li>
+<li>Better to have 2,000 valuable words than 3,000 padded words</li>
+<li><strong>Stay within the maximum word counts</strong>—overly long articles hurt user experience</li>
+</ul>
+<h2>Keyword Optimization</h2>
+<h3>Keyword Research Requirements</h3>
+<p>Before writing any article:<br />
+1. Identify primary target keyword<br />
+2. Research search volume and difficulty<br />
+3. Analyze top 10 ranking competitors<br />
+4. Identify 3-5 secondary/related keywords<br />
+5. List LSI (Latent Semantic Indexing) keywords</p>
+<h3>Keyword Density Guidelines</h3>
+<ul>
+<li><strong>Primary Keyword</strong>: 1-2% density</li>
+<li>Example: In a 2,000-word article, use keyword 20-40 times</li>
+<li>Natural integration is critical—never force keywords</li>
+<li><strong>Secondary Keywords</strong>: 0.5-1% density each</li>
+<li><strong>LSI Keywords</strong>: Sprinkle throughout naturally</li>
+</ul>
+<h3>Critical Keyword Placement</h3>
+<p>Primary keyword MUST appear in:<br />
+- [ ] H1 headline (preferably near the beginning)<br />
+- [ ] First 100 words of article<br />
+- [ ] At least 2-3 H2 subheadings<br />
+- [ ] Last paragraph / conclusion<br />
+- [ ] Meta title (within first 60 characters)<br />
+- [ ] Meta description<br />
+- [ ] URL slug</p>
+<h3>Keyword Integration Best Practices</h3>
+<ul>
+<li><strong>Natural language first</strong>: Write for humans, optimize for search engines</li>
+<li><strong>Use variations</strong>: Don't repeat exact phrase robotically</li>
+<li>Example: "AI consulting" → "AI consulting services" → "AI consultant"</li>
+<li><strong>Question formats</strong>: Include conversational variations</li>
+<li>"How to choose an AI consulting firm" vs "choosing an AI consultant"</li>
+<li><strong>Semantic keywords</strong>: Use related terms to support topical authority</li>
+<li>For "MLOps": include "model monitoring", "drift detection", "ML deployment", "CI/CD for ML"</li>
+</ul>
+<h3>Keyword Stuffing (Avoid)</h3>
+<p>❌ "AI consulting is important. AI consulting helps businesses. Our AI consulting services offer AI consulting for AI consulting needs."</p>
+<p>✅ "AI consulting helps businesses identify where machine learning creates real ROI — before committing budget to building the wrong thing. The right AI consultant shortens the path from idea to production system."</p>
+<h2>Content Structure Requirements</h2>
+<h3>Heading Hierarchy</h3>
+<h4>H1 (Title)</h4>
+<ul>
+<li><strong>Only one H1 per article</strong></li>
+<li>Include primary keyword naturally</li>
+<li>60 characters or less (for SERP display)</li>
+<li>Compelling and benefit-focused</li>
+<li>Should answer: "What will I learn/gain from this?"</li>
+</ul>
+<h4>H2 (Main Sections)</h4>
+<ul>
+<li><strong>4-7 H2 sections</strong> for standard articles</li>
+<li>At least <strong>2-3 should include keyword variations</strong></li>
+<li>Descriptive and keyword-rich</li>
+<li>Logical progression through topic</li>
+<li>Can be standalone (readers should understand flow from H2s alone)</li>
+</ul>
+<h4>H3 (Subsections)</h4>
+<ul>
+<li>Nested under H2s (never skip from H2 to H4)</li>
+<li>Break complex sections into digestible chunks</li>
+<li>Include keywords where natural</li>
+<li>More specific than H2s</li>
+</ul>
+<h3>Article Structure Template</h3>
+<pre><code class="language-markdown"># [H1: Compelling Title with Primary Keyword]
+
+## Introduction (150-250 words)
+- Hook: Attention-grabbing opening
+- Problem: What challenge does this address?
+- Promise: What will reader learn/achieve?
+- Keyword in first 100 words
+
+## [H2: Main Section 1 - Include Keyword Variation]
+### [H3: Subsection if needed]
+- Content depth
+- Examples
+- Data/statistics
+
+## [H2: Main Section 2]
+### [H3: Subsection if needed]
+- Content depth
+- Examples
+- Data/statistics
+
+## [H2: Main Section 3 - Include Keyword Variation]
+### [H3: Subsection if needed]
+- Content depth
+- Examples
+- Data/statistics
+
+## [H2: Main Section 4]
+[Continue with 4-7 total H2 sections]
+
+## Conclusion (150-250 words)
+- Recap key points (3-5 takeaways)
+- Include keyword
+- Clear call-to-action
+- Next steps for reader
+</code></pre>
+<h2>Meta Elements</h2>
+<h3>Meta Title</h3>
+<p><strong>Requirements</strong>:<br />
+- <strong>Length</strong>: 50-60 characters (including "| Aiquire" if used)<br />
+- <strong>Primary keyword</strong>: Must be included<br />
+- <strong>Compelling</strong>: Should encourage clicks from SERP<br />
+- <strong>Unique</strong>: Different from all other Castos page titles<br />
+- <strong>Accurate</strong>: Must match page content</p>
+<p><strong>Format Options</strong>:<br />
+- <code>[Primary Keyword]: [Benefit/Promise]</code><br />
+- <code>How to [Goal] | [Qualifier]</code><br />
+- <code>[Number] Ways to [Achieve Benefit]</code><br />
+- <code>[Topic] Guide for [Audience] | Castos</code></p>
+<p><strong>Examples</strong>:<br />
+- ✅ "Why AI projects fail (and how to avoid it)"<br />
+- ✅ "MLOps explained: keeping AI alive in production"<br />
+- ✅ "AI consulting services: what to look for | Aiquire"<br />
+- ❌ "AI Tips and Tricks" (too vague, no keyword)<br />
+- ❌ "The Ultimate Comprehensive Guide to Everything About Choosing an AI Consulting Firm in 2026" (too long)</p>
+<h3>Meta Description</h3>
+<p><strong>Requirements</strong>:<br />
+- <strong>Length</strong>: 150-160 characters<br />
+- <strong>Primary keyword</strong>: Include naturally<br />
+- <strong>Value proposition</strong>: Clear benefit to reader<br />
+- <strong>Call-to-action</strong>: Action phrase (Learn, Discover, Find out, Get, etc.)<br />
+- <strong>Complete</strong>: Must not cut off mid-sentence<br />
+- <strong>Compelling</strong>: Should drive clicks from SERP</p>
+<p><strong>Formula</strong>:</p>
+<pre><code>[Problem/Question]? [Solution/Benefit]. [Unique angle]. [CTA].
+</code></pre>
+<p><strong>Examples</strong>:<br />
+- ✅ "85% of AI projects fail before production. Learn the real reasons — and how to structure your initiative to succeed. Book a free discovery call." (145 chars)<br />
+- ✅ "What is MLOps and why does it matter? Plain-English guide to keeping ML models performing in production, from CI/CD to drift detection." (136 chars)<br />
+- ❌ "This blog post discusses AI consulting and related topics for businesses." (vague, no value prop, no CTA)</p>
+<h3>URL Slug</h3>
+<p><strong>Requirements</strong>:<br />
+- Include primary keyword<br />
+- Lowercase letters only<br />
+- Hyphens between words (not underscores)<br />
+- Short and descriptive (3-5 words ideal)<br />
+- No stop words unless necessary (a, the, and, of, etc.)</p>
+<p><strong>Format</strong>: <code>/blog/[primary-keyword-phrase]</code></p>
+<p><strong>Examples</strong>:<br />
+- ✅ <code>/blog/why-ai-projects-fail</code><br />
+- ✅ <code>/blog/what-is-mlops</code><br />
+- ✅ <code>/blog/generative-ai-for-enterprise</code><br />
+- ✅ <code>/blog/ai-consulting-services-guide</code><br />
+- ❌ <code>/blog/a-comprehensive-guide-to-understanding-ai-consulting-in-2026</code> (too long)<br />
+- ❌ <code>/blog/post-12345</code> (no keywords)</p>
+<h2>Internal Linking Strategy</h2>
+<h3>Requirements</h3>
+<ul>
+<li><strong>Minimum</strong>: 3 internal links per article</li>
+<li><strong>Optimal</strong>: 4-5 internal links</li>
+<li><strong>Maximum</strong>: 7 internal links (unless 3,000+ word article)</li>
+</ul>
+<h3>Link Types to Include</h3>
+<h4>1. Pillar Content (1-2 links)</h4>
+<ul>
+<li>Link to main comprehensive guides on related topics</li>
+<li>Builds topic cluster authority</li>
+<li>Usually 2,000+ word cornerstone content</li>
+</ul>
+<h4>2. Related Blog Posts (2-3 links)</h4>
+<ul>
+<li>Link to articles on related subtopics</li>
+<li>Creates content web</li>
+<li>Helps readers explore topics comprehensively</li>
+</ul>
+<h4>3. Product/Feature Pages (0-1 link)</h4>
+<ul>
+<li>Only when contextually relevant</li>
+<li>Natural mention of how Castos solves problem</li>
+<li>Never forced or overly promotional</li>
+</ul>
+<h4>4. Resource Pages (0-1 link)</h4>
+<ul>
+<li>Templates, tools, checklists</li>
+<li>When mentioned as solutions in content</li>
+<li>Provides additional value to reader</li>
+</ul>
+<h3>Internal Linking Best Practices</h3>
+<p><strong>Anchor Text</strong>:<br />
+- ✅ Descriptive and keyword-rich: "our complete guide to podcast analytics"<br />
+- ✅ Natural in sentence flow: "Learn more about podcast SEO strategies"<br />
+- ❌ Generic: "click here" or "read more"<br />
+- ❌ Exact match repeatedly: Always using same anchor text for same page</p>
+<p><strong>Placement</strong>:<br />
+- Within body paragraphs (most valuable)<br />
+- Natural context that adds value to reader<br />
+- Never more than 2 links per paragraph<br />
+- Distributed throughout article, not clustered</p>
+<p><strong>Reference</strong>:<br />
+- Always check <code>@context/internal-links-map.md</code> for Aiquire's priority linking targets (service pages, case studies, blog posts)<br />
+- Ensure links are current and functional<br />
+- Link to most relevant, up-to-date content</p>
+<h2>External Linking Strategy</h2>
+<h3>Requirements</h3>
+<ul>
+<li><strong>Minimum</strong>: 2 external links per article</li>
+<li><strong>Optimal</strong>: 3-4 external authority links</li>
+<li>Purpose: Add credibility, provide sources, support claims</li>
+</ul>
+<h3>What to Link Externally</h3>
+<ul>
+<li><strong>Statistics and data sources</strong>: Always cite where numbers come from</li>
+<li><strong>Research and studies</strong>: Link to original research</li>
+<li><strong>Tools and resources</strong>: When recommending specific tools</li>
+<li><strong>Industry authorities</strong>: Expert opinions or industry publications</li>
+</ul>
+<h3>External Link Quality Standards</h3>
+<ul>
+<li><strong>Authority</strong>: Link to credible, well-known sources</li>
+<li>✅ Industry publications (McKinsey Insights, MIT Sloan Review, Harvard Business Review, Gartner, Forrester)</li>
+<li>✅ Research institutions (MIT, Stanford AI Lab, Oxford Internet Institute)</li>
+<li>✅ Established tech media (TechCrunch, VentureBeat, Wired, The Verge for AI)</li>
+<li>✅ Academic papers (arXiv, peer-reviewed journals)</li>
+<li>❌ Random blogs with no authority</li>
+<li>
+<p>❌ Spammy or low-quality sites</p>
+</li>
+<li>
+<p><strong>Relevance</strong>: Links must directly support content claims</p>
+</li>
+<li><strong>Freshness</strong>: Prefer recent sources (within 1-2 years for data)</li>
+<li><strong>Functionality</strong>: All links must work (no broken links)</li>
+</ul>
+<h3>External Link Attributes</h3>
+<ul>
+<li>Most external links: No special attributes needed</li>
+<li>Sponsored/affiliate links: Use <code>rel="sponsored"</code> or <code>rel="nofollow"</code></li>
+<li>User-generated content: Use <code>rel="nofollow"</code></li>
+</ul>
+<h2>Readability Optimization</h2>
+<h3>Target Reading Level</h3>
+<ul>
+<li><strong>Goal</strong>: 8th-10th grade reading level (Flesch-Kincaid)</li>
+<li>Makes content accessible to wider audience</li>
+<li>Easier to scan and understand quickly</li>
+</ul>
+<h3>Sentence Structure</h3>
+<ul>
+<li><strong>Average length</strong>: 15-20 words per sentence</li>
+<li><strong>Maximum</strong>: 25 words (break longer sentences into two)</li>
+<li><strong>Variety</strong>: Mix short punchy sentences with longer explanatory ones</li>
+<li><strong>Active voice</strong>: Preferred over passive voice (80%+ active)</li>
+</ul>
+<h3>Paragraph Structure</h3>
+<ul>
+<li><strong>Length</strong>: 2-4 sentences per paragraph</li>
+<li><strong>One idea</strong>: Focus each paragraph on single point</li>
+<li><strong>White space</strong>: No walls of text</li>
+<li><strong>Mobile-friendly</strong>: Short paragraphs scan better on phones</li>
+</ul>
+<h3>Formatting for Scannability</h3>
+<ul>
+<li><strong>Subheadings</strong>: Every 300-400 words</li>
+<li><strong>Lists</strong>: Use bullets/numbers for sequential or multiple items</li>
+<li><strong>Bold</strong>: Emphasize key concepts or takeaways</li>
+<li><strong>Short paragraphs</strong>: Easier to digest</li>
+<li><strong>White space</strong>: Makes content less intimidating</li>
+</ul>
+<h3>Transition Words</h3>
+<p>Use transition words to improve flow (target: one per paragraph):<br />
+- Addition: Additionally, Furthermore, Moreover<br />
+- Contrast: However, On the other hand, Nevertheless<br />
+- Cause/Effect: Therefore, Consequently, As a result<br />
+- Example: For instance, For example, Specifically<br />
+- Time: First, Next, Finally</p>
+<h2>Content Quality Standards</h2>
+<h3>Expertise, Authoritativeness, Trustworthiness (E-A-T)</h3>
+<h4>Expertise</h4>
+<ul>
+<li>Provide accurate, detailed information on AI consulting and engineering topics</li>
+<li>Back claims with data, case studies, and real production experience</li>
+<li>Demonstrate deep understanding of business leader and technical leader needs</li>
+<li>Include actionable, practical advice — not just theory</li>
+</ul>
+<h4>Authoritativeness</h4>
+<ul>
+<li>Cite credible sources (McKinsey, Gartner, MIT, peer-reviewed research)</li>
+<li>Reference Aiquire's own track record: 40+ production systems, 3.2x ROI, 92% retention</li>
+<li>Include client quotes and case study results where relevant</li>
+<li>Leverage Aiquire's position as a strategy + engineering firm (not just one or the other)</li>
+</ul>
+<h4>Trustworthiness</h4>
+<ul>
+<li>Be transparent and honest — including when AI is NOT the right answer</li>
+<li>Acknowledge limitations and failure modes (this builds more trust than pretending AI always works)</li>
+<li>Don't overpromise — no "AI will 10x your business" claims without evidence</li>
+<li>Cite sources for all statistics and claims</li>
+<li>Update outdated content regularly — AI moves fast</li>
+</ul>
+<h3>Content Originality</h3>
+<ul>
+<li><strong>Never plagiarise</strong>: All content must be original</li>
+<li><strong>Add unique value</strong>: What practitioner perspective does Aiquire add that McKinsey or Accenture can't?</li>
+<li><strong>Fresh examples</strong>: Use recent case studies and current examples</li>
+<li><strong>Updated data</strong>: AI stats age quickly — verify recency of all figures</li>
+<li><strong>Unique angle</strong>: The "strategy + engineering combined" and "pilot to production" angles are Aiquire's content moat</li>
+</ul>
+<h3>Factual Accuracy</h3>
+<ul>
+<li><strong>Verify statistics</strong>: Check all numbers and data points — especially AI failure rates and ROI figures</li>
+<li><strong>Current information</strong>: Ensure technical practices are up-to-date (AI stack changes rapidly)</li>
+<li><strong>Technical accuracy</strong>: AI/ML terminology must be correct — Aiquire's credibility depends on this</li>
+<li><strong>Aiquire services</strong>: Ensure service references match current offerings at aiquire.siprahub.com</li>
+</ul>
+<h2>Image Optimization</h2>
+<h3>Image Requirements</h3>
+<ul>
+<li><strong>Relevant</strong>: Images should support content points</li>
+<li><strong>High-quality</strong>: Professional appearance</li>
+<li><strong>Optimized</strong>: Compressed for fast loading</li>
+<li><strong>Mobile-friendly</strong>: Visible and useful on small screens</li>
+</ul>
+<h3>Image SEO</h3>
+<p><strong>File Names</strong>:<br />
+- Descriptive and keyword-rich<br />
+- ✅ <code>ai-consulting-double-diamond-methodology.jpg</code><br />
+- ✅ <code>mlops-model-monitoring-dashboard.jpg</code><br />
+- ❌ <code>IMG_12345.jpg</code></p>
+<p><strong>Alt Text</strong>:<br />
+- Describe what image shows (accessibility + SEO)<br />
+- Include keywords naturally where relevant<br />
+- 125 characters or less<br />
+- ✅ "Double Diamond methodology diagram showing Discover, Define, Develop, Deliver phases for AI projects"<br />
+- ✅ "MLOps model monitoring dashboard showing drift detection and performance metrics"<br />
+- ❌ "Image"</p>
+<p><strong>Placement</strong>:<br />
+- Break up long text sections<br />
+- Illustrate concepts being discussed<br />
+- After explaining concept, not before</p>
+<h2>Featured Snippet Optimization</h2>
+<p>Featured snippets appear at position 0 in Google search results. Optimize for them when possible.</p>
+<h3>Question-Based Snippets</h3>
+<ul>
+<li>Include question as H2 heading</li>
+<li>Answer concisely in 40-60 words immediately after</li>
+<li>Use clear, direct language</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<pre><code class="language-markdown">## What is MLOps?
+
+MLOps (machine learning operations) is the set of practices and tools for deploying, monitoring, and maintaining machine learning models in production. Without MLOps, models degrade silently as data distributions shift — often without any obvious system error.
+</code></pre>
+<h3>List-Based Snippets</h3>
+<ul>
+<li>Use numbered or bulleted lists</li>
+<li>Keep items concise (1-2 sentences each)</li>
+<li>Include 5-8 items typically</li>
+</ul>
+<h3>Table-Based Snippets</h3>
+<ul>
+<li>Use HTML tables or markdown tables</li>
+<li>Comparison charts, pricing, specifications</li>
+<li>Clear headers and organized data</li>
+</ul>
+<h3>Definition Snippets</h3>
+<ul>
+<li>Define term in first sentence after heading</li>
+<li>40-60 word clear, concise definition</li>
+<li>Expand with additional detail after</li>
+</ul>
+<h2>Mobile Optimization</h2>
+<h3>Mobile-First Considerations</h3>
+<ul>
+<li><strong>Short paragraphs</strong>: 2-3 sentences max</li>
+<li><strong>Scannable</strong>: Heavy use of subheadings and lists</li>
+<li><strong>Large fonts</strong>: Readable without zooming</li>
+<li><strong>Tap-friendly links</strong>: Adequate spacing</li>
+<li><strong>Fast loading</strong>: Optimized images</li>
+</ul>
+<h2>Content Refresh Strategy</h2>
+<h3>When to Update Content</h3>
+<ul>
+<li>Article is 12+ months old</li>
+<li>Statistics or data are outdated</li>
+<li>Processes or best practices have changed</li>
+<li>Competitor content has surpassed ours</li>
+<li>Rankings have declined</li>
+<li>New relevant information available</li>
+</ul>
+<h3>What to Update</h3>
+<ul>
+<li>Publication date or "Last Updated" date</li>
+<li>Statistics with current data</li>
+<li>Screenshots with current versions</li>
+<li>Examples with recent case studies</li>
+<li>SEO elements (keyword focus may have shifted)</li>
+<li>Internal links to newer content</li>
+</ul>
+<h2>SEO Checklist for Every Article</h2>
+<p>Before publishing, verify:</p>
+<h3>Content</h3>
+<ul>
+<li>[ ] 2,000+ words (or appropriate for content type)</li>
+<li>[ ] Primary keyword identified</li>
+<li>[ ] Keyword density 1-2%</li>
+<li>[ ] 3-5 secondary keywords included</li>
+<li>[ ] LSI keywords naturally integrated</li>
+<li>[ ] Provides unique value vs. competitors</li>
+<li>[ ] Factually accurate and current</li>
+</ul>
+<h3>Structure</h3>
+<ul>
+<li>[ ] One H1 with primary keyword</li>
+<li>[ ] 4-7 H2 sections</li>
+<li>[ ] 2-3 H2s include keyword variations</li>
+<li>[ ] Proper H1&gt;H2&gt;H3 hierarchy</li>
+<li>[ ] Keyword in first 100 words</li>
+<li>[ ] Keyword in conclusion</li>
+</ul>
+<h3>Meta Elements</h3>
+<ul>
+<li>[ ] Meta title 50-60 characters with keyword</li>
+<li>[ ] Meta description 150-160 characters with keyword &amp; CTA</li>
+<li>[ ] URL slug includes primary keyword</li>
+<li>[ ] All meta elements are unique</li>
+</ul>
+<h3>Links</h3>
+<ul>
+<li>[ ] 3-5 internal links included</li>
+<li>[ ] Internal links use descriptive anchor text</li>
+<li>[ ] 2-3 external authority links</li>
+<li>[ ] All links functional (no broken links)</li>
+<li>[ ] Links add value to reader</li>
+</ul>
+<h3>Readability</h3>
+<ul>
+<li>[ ] 8th-10th grade reading level</li>
+<li>[ ] Average sentence length 15-20 words</li>
+<li>[ ] Paragraphs 2-4 sentences</li>
+<li>[ ] Subheadings every 300-400 words</li>
+<li>[ ] Lists used for scannability</li>
+<li>[ ] Active voice predominantly</li>
+</ul>
+<h3>Images</h3>
+<ul>
+<li>[ ] Relevant images included</li>
+<li>[ ] Descriptive file names</li>
+<li>[ ] Alt text with keywords</li>
+<li>[ ] Images optimized for web</li>
+</ul>
+<h3>Quality</h3>
+<ul>
+<li>[ ] No spelling or grammar errors</li>
+<li>[ ] Factually accurate</li>
+<li>[ ] Sources cited</li>
+<li>[ ] Brand voice maintained</li>
+<li>[ ] Provides actionable value</li>
+<li>[ ] Clear call-to-action</li>
+</ul>
+<h2>SEO Tools &amp; Resources</h2>
+<h3>Recommended Tools</h3>
+<ul>
+<li><strong>Keyword Research</strong>: Ahrefs, SEMrush, Google Keyword Planner</li>
+<li><strong>Content Analysis</strong>: Clearscope, Surfer SEO, MarketMuse</li>
+<li><strong>Readability</strong>: Hemingway Editor, Grammarly</li>
+<li><strong>Technical SEO</strong>: Screaming Frog, Google Search Console</li>
+<li><strong>Rank Tracking</strong>: Ahrefs, SEMrush, Google Search Console</li>
+</ul>
+<h3>Reference Resources</h3>
+<ul>
+<li>Google's Search Quality Evaluator Guidelines</li>
+<li>Moz Beginner's Guide to SEO</li>
+<li>Backlinko Blog (Brian Dean)</li>
+<li>Search Engine Journal</li>
+<li>Ahrefs Blog</li>
+</ul>
+<hr />
+<p><strong>Remember</strong>: SEO serves the user, not the algorithm. Never sacrifice content quality, accuracy, or helpfulness for keyword optimisation. The best SEO is great content that genuinely helps business leaders and technical teams make better AI decisions — and trust Aiquire as the firm that can help them execute.</p>`, "writing-examples.md": `<h1>Aiquire Writing Examples</h1>
+<p>This file should contain 3–5 exemplary blog posts that demonstrate Aiquire's brand voice, style, and quality standards. These examples help the AI understand how to write in Aiquire's voice.</p>
+<p><strong>Brand voice summary</strong>: Direct, credible, outcome-focused. Call out AI hype. Lead with business results. Use British English. Always connect technology to ROI.</p>
+<hr />
+<h2>How to Add Examples</h2>
+<p>Add 3–5 complete blog post examples from https://aiquire.siprahub.com/blog that represent:<br />
+1. The ideal brand voice and tone (direct, results-focused, honest)<br />
+2. Strong SEO optimisation<br />
+3. High-quality, valuable content for business decision-makers<br />
+4. Proper structure and formatting<br />
+5. Effective use of case study data and real metrics</p>
+<p>For each example, include:<br />
+- <strong>URL</strong>: Link to the original post<br />
+- <strong>Title</strong>: Full headline<br />
+- <strong>Primary Keyword</strong>: Target keyword for that article<br />
+- <strong>Word Count</strong>: Approximate length<br />
+- <strong>Publication Date</strong>: When it was published<br />
+- <strong>What Makes It Great</strong>: 2–3 specific reasons this is exemplary<br />
+- <strong>Full Content</strong>: The complete article text</p>
+<hr />
+<h2>Current Blog Posts (Add Full Content Below)</h2>
+<p>The following posts exist on the Aiquire blog. Copy and paste their full content into this file:</p>
+<ol>
+<li><strong>What is MLOps</strong> — https://aiquire.siprahub.com/blog/what-is-mlops</li>
+<li><strong>AI vs Machine Learning vs Deep Learning</strong> — https://aiquire.siprahub.com/blog/ai-vs-machine-learning-vs-deep-learning</li>
+<li><strong>What is Generative AI</strong> — https://aiquire.siprahub.com/blog/what-is-generative-ai</li>
+<li><strong>AI Development Process Explained</strong> — https://aiquire.siprahub.com/blog/ai-development-process-explained</li>
+<li><strong>How AI is Transforming Businesses</strong> — https://aiquire.siprahub.com/blog/how-ai-is-transforming-businesses</li>
+</ol>
+<hr />
+<h2>Voice Reference: What Excellent Aiquire Content Looks Like</h2>
+<p>Until full blog posts are added, use these voice examples to calibrate tone:</p>
+<h3>Example Opening (Hook Style) ✅</h3>
+<p>"85% of AI pilots never reach production.</p>
+<p>That's not a technology problem. The technology works. The problem is almost always the same: the wrong problem was chosen to solve.</p>
+<p>Before we write a single line of code, our consulting team spends weeks asking harder questions than most AI vendors are willing to ask. Questions like: Where does your team waste the most time? What manual process creates the most downstream rework? What would a 30% reduction in [specific metric] actually mean for your P&amp;L?</p>
+<p>That's the intelligence gap — and closing it is the only thing that turns an AI pilot into a production system."</p>
+<p><strong>Why it works</strong>:<br />
+- Opens with a specific, provocative statistic<br />
+- Immediately challenges the assumption (tech isn't the problem)<br />
+- Shows Aiquire's methodology without pitching<br />
+- Uses specific metric example (30% reduction)<br />
+- "Intelligence gap" ties back to brand language</p>
+<hr />
+<h3>Example Case Study Paragraph ✅</h3>
+<p>"When an insurance company came to us with a customer service problem, they wanted a chatbot.</p>
+<p>We pushed back.</p>
+<p>After two weeks of stakeholder interviews and process mapping, we found the real bottleneck: experienced agents spent 40% of every call searching for the right answer, losing confidence, and extending resolution time. The problem wasn't the front-end interface — it was the decision support layer.</p>
+<p>We built a real-time AI co-pilot that analyses customer intent and sentiment as the conversation unfolds, surfaces the most relevant knowledge base articles and suggested responses, and flags calls requiring escalation. No chatbot. Just a smarter agent.</p>
+<p>Resolution time dropped 30%. Customer satisfaction improved 45%. New agent training costs halved — because agents ramp faster when they have AI support from day one."</p>
+<p><strong>Why it works</strong>:<br />
+- Narrative structure: problem → challenge → discovery → solution → results<br />
+- Numbers are specific and believable<br />
+- Shows the consulting process, not just the technical solution<br />
+- "We pushed back" demonstrates the candid advisor positioning<br />
+- Results presented in business terms (not technical metrics)</p>
+<hr />
+<h3>Example Technical Explanation ✅</h3>
+<p>"MLOps — machine learning operations — is the discipline that keeps your AI investments performing after launch.</p>
+<p>Most teams know what it means to deploy a model. Few account for what happens six months later.</p>
+<p>Data distributions shift. Customer behaviour changes. The patterns your model learned in training stop reflecting the real world. This is called model drift — and it happens silently, without error messages, without alerts, until your AI recommendations are so degraded they're causing more harm than good.</p>
+<p>MLOps is the answer. Specifically: automated monitoring that tracks model performance against agreed KPIs; drift detection that flags when the gap between expected and actual outputs exceeds a threshold; and retraining pipelines that update the model on fresh data before performance visibly degrades.</p>
+<p>The companies that get this right treat deployed models like production software — with CI/CD, version control, and SLAs. The companies that don't are running on borrowed time."</p>
+<p><strong>Why it works</strong>:<br />
+- Defines the term plainly in first sentence<br />
+- Immediately connects to business consequence (not technical jargon)<br />
+- "Model drift" explained clearly for non-technical audience<br />
+- Specific technical solutions listed without being overwhelming<br />
+- Final sentence creates urgency without fearmongering</p>
+<hr />
+<h3>Example to Avoid ❌</h3>
+<p>"Artificial intelligence is revolutionizing the business landscape in unprecedented ways. As organizations increasingly leverage cutting-edge AI technologies to transform their operations, it becomes crucial to understand how these innovative solutions can drive meaningful value across various industry verticals.</p>
+<p>At Aiquire, we are committed to delivering state-of-the-art AI solutions that help our clients achieve their strategic objectives through the synergistic application of machine learning, natural language processing, and other advanced AI methodologies."</p>
+<p><strong>Why it fails</strong>:<br />
+- "Revolutionizing", "unprecedented", "cutting-edge", "synergistic" — pure buzzwords<br />
+- No specific claim, no metric, no actual insight<br />
+- Corporate-speak with zero personality<br />
+- Could have been written by any AI company<br />
+- Passive, vague — no reader will trust this</p>
+<hr />
+<h2>Priority: Add Full Articles</h2>
+<p>To activate this file fully, paste complete articles from https://aiquire.siprahub.com/blog into this document. The more complete and representative the examples, the better the AI understands and replicates Aiquire's writing style.</p>
+<p><strong>Ideal mix of examples</strong>:<br />
+1. Educational/TOFU (e.g., "What is MLOps") — shows how to explain AI concepts for non-technical readers<br />
+2. Thought leadership (e.g., "Why AI projects fail") — shows opinionated, data-backed analysis<br />
+3. Industry-specific (e.g., healthcare or insurance AI) — shows how to write with domain authority<br />
+4. Service-adjacent (e.g., "Custom ML vs off-the-shelf AI") — shows commercial angle with editorial honesty<br />
+5. Case study narrative — shows how to tell client success stories with metrics</p>
+<p><strong>Remember</strong>: Choose posts that truly reflect Aiquire's voice — direct, credible, honest, outcome-focused, written in British English.</p>`, "cro-best-practices.md": `<h1>CRO Best Practices for Landing Pages</h1>
+<p>Conversion Rate Optimization guidelines for landing pages.</p>
+<hr />
+<h2>Above-the-Fold Rules</h2>
+<h3>The 5-Second Test</h3>
+<p>Visitors should understand these within 5 seconds of landing:<br />
+1. <strong>What</strong> you offer<br />
+2. <strong>Who</strong> it's for<br />
+3. <strong>Why</strong> they should care<br />
+4. <strong>What</strong> to do next (CTA)</p>
+<h3>Required Elements</h3>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Purpose</th>
+<th>Guidelines</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Headline</td>
+<td>Grab attention</td>
+<td>Benefit-focused, &lt;70 chars</td>
+</tr>
+<tr>
+<td>Subheadline</td>
+<td>Clarify value</td>
+<td>Expand on headline, 1-2 sentences</td>
+</tr>
+<tr>
+<td>CTA Button</td>
+<td>Drive action</td>
+<td>High contrast, action verb</td>
+</tr>
+<tr>
+<td>Trust Signal</td>
+<td>Build credibility</td>
+<td>Customer count, rating, or logo</td>
+</tr>
+</tbody>
+</table>
+<h3>Above-the-Fold Don'ts</h3>
+<ul>
+<li>No sliders or carousels</li>
+<li>No multiple competing CTAs</li>
+<li>No walls of text</li>
+<li>No autoplay videos with sound</li>
+<li>No navigation that distracts from CTA</li>
+</ul>
+<hr />
+<h2>Headline Best Practices</h2>
+<h3>Headline Formulas That Convert</h3>
+<p><strong>Problem-Solution:</strong><br />
+- "Stop [Pain Point]. Start [Desired Outcome]."<br />
+- "No More [Problem]. Just [Solution]."</p>
+<p><strong>Benefit-First:</strong><br />
+- "[Achieve Outcome] Without [Sacrifice]"<br />
+- "The [Fastest/Easiest/Only] Way to [Outcome]"</p>
+<p><strong>Social Proof:</strong><br />
+- "Join [Number] [Audience] Who [Achieved Outcome]"<br />
+- "Why [Number] [Audience] Switched to [Product]"</p>
+<p><strong>Question:</strong><br />
+- "Ready to [Achieve Outcome]?"<br />
+- "What if You Could [Desired Outcome]?"</p>
+<h3>Headline Testing Checklist</h3>
+<ul>
+<li>[ ] Contains the primary benefit</li>
+<li>[ ] Under 70 characters (mobile-friendly)</li>
+<li>[ ] Uses "you" or implies the reader</li>
+<li>[ ] Specific (not vague or generic)</li>
+<li>[ ] Creates curiosity or urgency</li>
+</ul>
+<h3>Weak Headlines to Avoid</h3>
+<ul>
+<li>"Welcome to [Company]"</li>
+<li>"The Best [Product] Solution"</li>
+<li>"Everything You Need"</li>
+<li>"We Help You [Generic Verb]"</li>
+<li>Starting with "Our" or "We"</li>
+</ul>
+<hr />
+<h2>CTA Best Practices</h2>
+<h3>CTA Text Guidelines</h3>
+<p><strong>By Conversion Goal:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Goal</th>
+<th>Strong CTAs</th>
+<th>Avoid</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Trial</td>
+<td>"Start Your Free Trial"</td>
+<td>"Sign Up"</td>
+</tr>
+<tr>
+<td>Trial</td>
+<td>"Try Free for 14 Days"</td>
+<td>"Submit"</td>
+</tr>
+<tr>
+<td>Trial</td>
+<td>"Get Started Free"</td>
+<td>"Register"</td>
+</tr>
+<tr>
+<td>Demo</td>
+<td>"Book Your Demo"</td>
+<td>"Contact Us"</td>
+</tr>
+<tr>
+<td>Demo</td>
+<td>"Schedule a Call"</td>
+<td>"Get in Touch"</td>
+</tr>
+<tr>
+<td>Demo</td>
+<td>"See It in Action"</td>
+<td>"Learn More"</td>
+</tr>
+<tr>
+<td>Lead</td>
+<td>"Download the Free Guide"</td>
+<td>"Submit"</td>
+</tr>
+<tr>
+<td>Lead</td>
+<td>"Get Instant Access"</td>
+<td>"Subscribe"</td>
+</tr>
+<tr>
+<td>Lead</td>
+<td>"Claim Your Copy"</td>
+<td>"Send"</td>
+</tr>
+</tbody>
+</table>
+<h3>CTA Button Formula</h3>
+<p><strong>[Action Verb] + [Benefit/Object] + [Urgency (optional)]</strong></p>
+<p>Examples:<br />
+- "Start" + "Your Free Trial" + "→"<br />
+- "Get" + "Instant Access" + "Now"<br />
+- "Book" + "Your Demo" + "Today"</p>
+<h3>CTA Placement Strategy</h3>
+<ol>
+<li><strong>Hero CTA</strong> (0-20% of page): Primary, most prominent</li>
+<li><strong>Post-Problem CTA</strong> (30-40%): After establishing pain</li>
+<li><strong>Post-Proof CTA</strong> (60-70%): After testimonials</li>
+<li><strong>Closing CTA</strong> (90-100%): Final push with risk reversal</li>
+</ol>
+<h3>CTA Visual Best Practices</h3>
+<ul>
+<li><strong>Color</strong>: High contrast with background</li>
+<li><strong>Size</strong>: Large enough to tap (44x44px minimum)</li>
+<li><strong>Whitespace</strong>: Breathing room around button</li>
+<li><strong>Consistency</strong>: Same style throughout page</li>
+<li><strong>Mobile</strong>: Full-width on small screens</li>
+</ul>
+<hr />
+<h2>Trust Signal Hierarchy</h2>
+<h3>Strongest (Use First)</h3>
+<ol>
+<li><strong>Specific Results</strong>: "Grew audience by 300%"</li>
+<li><strong>Named Testimonials</strong>: "Sarah M., The Creative Hour"</li>
+<li><strong>Customer Count with Context</strong>: "50,000+ customers"</li>
+</ol>
+<h3>Strong</h3>
+<ol>
+<li><strong>Star Ratings</strong>: "4.9/5 on G2"</li>
+<li><strong>Media Logos</strong>: "As seen in..."</li>
+<li><strong>Customer Logos</strong>: Enterprise/recognizable brands</li>
+</ol>
+<h3>Supporting</h3>
+<ol>
+<li><strong>Awards/Certifications</strong>: "Best in Category 2024"</li>
+<li><strong>Partnerships</strong>: "Official Partner"</li>
+<li><strong>Security Badges</strong>: For payment/data collection pages</li>
+</ol>
+<h3>Trust Signal Placement</h3>
+<table>
+<thead>
+<tr>
+<th>Location</th>
+<th>Best Trust Signal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hero (above fold)</td>
+<td>Customer count or rating</td>
+</tr>
+<tr>
+<td>After problem section</td>
+<td>Mini-story with outcome</td>
+</tr>
+<tr>
+<td>Middle of page</td>
+<td>Full testimonials (2-3)</td>
+</tr>
+<tr>
+<td>Near CTA</td>
+<td>Risk reversal statement</td>
+</tr>
+<tr>
+<td>Footer</td>
+<td>Security/privacy badges</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Risk Reversal Tactics</h2>
+<h3>For Free Trial</h3>
+<ul>
+<li>"No credit card required"</li>
+<li>"Cancel anytime"</li>
+<li>"Full access for [X] days"</li>
+<li>"No commitment"</li>
+<li>"Set up in under 5 minutes"</li>
+</ul>
+<h3>For Demo Requests</h3>
+<ul>
+<li>"No pressure, no hard sell"</li>
+<li>"Just [X] minutes of your time"</li>
+<li>"Get your questions answered"</li>
+<li>"See if we're a fit"</li>
+</ul>
+<h3>For Lead Capture</h3>
+<ul>
+<li>"No spam, ever"</li>
+<li>"Unsubscribe anytime"</li>
+<li>"Instant download"</li>
+<li>"Free, no strings attached"</li>
+</ul>
+<h3>Risk Reversal Placement</h3>
+<p>Always place risk reversal <strong>directly below or beside the CTA button</strong>.</p>
+<hr />
+<h2>Objection Handling</h2>
+<h3>Common Objections &amp; Responses</h3>
+<p><strong>"It's too expensive"</strong><br />
+- Lead with free trial<br />
+- Show ROI/value<br />
+- Compare to competitor costs<br />
+- Highlight what's included</p>
+<p><strong>"It looks complicated"</strong><br />
+- "Set up in 5 minutes"<br />
+- Show simple 3-step process<br />
+- Include "no technical skills needed"</p>
+<p><strong>"I'm not ready"</strong><br />
+- Use urgency sparingly<br />
+- Offer lead magnet alternative<br />
+- Provide "learn more" secondary CTA</p>
+<p><strong>"I don't know if it's right for me"</strong><br />
+- Testimonials from similar users<br />
+- Specific use case sections<br />
+- "Perfect for [audience]" positioning</p>
+<p><strong>"Can I trust you?"</strong><br />
+- Customer count<br />
+- Years in business<br />
+- Known customer logos<br />
+- Money-back guarantee</p>
+<hr />
+<h2>Form Optimization</h2>
+<h3>Field Reduction</h3>
+<p>Every additional field reduces conversions by ~10%</p>
+<p><strong>Recommended Fields by Goal:</strong><br />
+| Goal | Fields | What to Ask |<br />
+|------|--------|-------------|<br />
+| Trial | 2-3 | Email, Password, (Name) |<br />
+| Demo | 3-4 | Name, Email, Company, (Role) |<br />
+| Lead | 1-2 | Email, (Name) |</p>
+<h3>Form Best Practices</h3>
+<ul>
+<li>Single column layout</li>
+<li>Clear labels above fields</li>
+<li>Helpful placeholder text</li>
+<li>Real-time validation</li>
+<li>Mobile-friendly input types</li>
+<li>Progress indicator for multi-step</li>
+</ul>
+<h3>Form Placement</h3>
+<ul>
+<li>Above the fold for PPC</li>
+<li>After value establishment for SEO</li>
+<li>Never at the very bottom</li>
+</ul>
+<hr />
+<h2>Page Speed Impact</h2>
+<h3>Conversion Impact</h3>
+<ul>
+<li>1 second delay = 7% conversion drop</li>
+<li>3 second load = 40% abandonment</li>
+<li>Mobile users expect &lt;3 seconds</li>
+</ul>
+<h3>Quick Wins</h3>
+<ul>
+<li>Compress images (WebP format)</li>
+<li>Minimize JavaScript</li>
+<li>Use lazy loading for below-fold</li>
+<li>Optimize fonts (system fonts fastest)</li>
+<li>Enable browser caching</li>
+</ul>
+<hr />
+<h2>Mobile Optimization</h2>
+<h3>Mobile-First Rules</h3>
+<ul>
+<li>60%+ traffic is mobile</li>
+<li>Design for mobile, then adapt for desktop</li>
+<li>Touch-friendly tap targets (44x44px)</li>
+<li>Readable without zooming (16px+ font)</li>
+</ul>
+<h3>Mobile CTA Guidelines</h3>
+<ul>
+<li>Full-width buttons</li>
+<li>Sticky CTA on scroll (optional)</li>
+<li>Phone number click-to-call</li>
+<li>Simplified forms</li>
+</ul>
+<h3>Mobile Content Rules</h3>
+<ul>
+<li>Shorter headlines (&lt;60 chars)</li>
+<li>Front-load key information</li>
+<li>Accordion FAQs to save space</li>
+<li>Minimal navigation</li>
+</ul>
+<hr />
+<h2>A/B Testing Priorities</h2>
+<h3>High Impact (Test First)</h3>
+<ol>
+<li>Headline</li>
+<li>CTA text</li>
+<li>CTA color/size</li>
+<li>Hero image/video</li>
+<li>Social proof placement</li>
+</ol>
+<h3>Medium Impact</h3>
+<ol>
+<li>Subheadline</li>
+<li>Form length</li>
+<li>Testimonial selection</li>
+<li>Pricing presentation</li>
+<li>Risk reversal text</li>
+</ol>
+<h3>Low Impact (Test Later)</h3>
+<ol>
+<li>Button shape</li>
+<li>Font choices</li>
+<li>Footer content</li>
+<li>Image style</li>
+<li>Color scheme</li>
+</ol>
+<h3>Testing Rules</h3>
+<ul>
+<li>One variable at a time</li>
+<li>Minimum 100 conversions per variant</li>
+<li>Run for at least 2 weeks</li>
+<li>95% statistical significance</li>
+</ul>
+<hr />
+<h2>Conversion Goal Benchmarks</h2>
+<h3>Industry Averages</h3>
+<table>
+<thead>
+<tr>
+<th>Goal</th>
+<th>Average</th>
+<th>Good</th>
+<th>Excellent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Free Trial</td>
+<td>3-5%</td>
+<td>7-10%</td>
+<td>15%+</td>
+</tr>
+<tr>
+<td>Demo Request</td>
+<td>2-4%</td>
+<td>5-8%</td>
+<td>10%+</td>
+</tr>
+<tr>
+<td>Lead Capture</td>
+<td>5-10%</td>
+<td>15-25%</td>
+<td>30%+</td>
+</tr>
+</tbody>
+</table>
+<h3>Factors That Affect Conversion</h3>
+<ul>
+<li>Traffic source quality</li>
+<li>Brand awareness</li>
+<li>Price point</li>
+<li>Competition</li>
+<li>Offer strength</li>
+<li>Page experience</li>
+</ul>
+<hr />
+<h2>Psychology Principles</h2>
+<h3>Scarcity</h3>
+<ul>
+<li>Limited time offers</li>
+<li>Limited spots available</li>
+<li>Stock/availability indicators</li>
+<li>Use sparingly and honestly</li>
+</ul>
+<h3>Social Proof</h3>
+<ul>
+<li>"Join 50,000+ customers"</li>
+<li>Testimonials with faces</li>
+<li>Live user counts</li>
+<li>Recent signup notifications</li>
+</ul>
+<h3>Authority</h3>
+<ul>
+<li>Expert endorsements</li>
+<li>Media mentions</li>
+<li>Certifications</li>
+<li>Years of experience</li>
+</ul>
+<h3>Reciprocity</h3>
+<ul>
+<li>Free trial first</li>
+<li>Free resources/guides</li>
+<li>Helpful content before ask</li>
+</ul>
+<h3>Urgency</h3>
+<ul>
+<li>Time-limited offers</li>
+<li>"Start today" messaging</li>
+<li>Countdown timers (use carefully)</li>
+<li>Season/event-based hooks</li>
+</ul>
+<hr />
+<h2>Landing Page Audit Checklist</h2>
+<h3>Above the Fold</h3>
+<ul>
+<li>[ ] Clear, benefit-focused headline</li>
+<li>[ ] Value proposition in 5 seconds</li>
+<li>[ ] Prominent CTA button</li>
+<li>[ ] Trust signal visible</li>
+<li>[ ] No distracting elements</li>
+</ul>
+<h3>Content</h3>
+<ul>
+<li>[ ] Benefits before features</li>
+<li>[ ] Scannable format (lists, bold, headers)</li>
+<li>[ ] Appropriate length for page type</li>
+<li>[ ] Addresses objections</li>
+<li>[ ] Clear next step</li>
+</ul>
+<h3>CTAs</h3>
+<ul>
+<li>[ ] Action verb + benefit</li>
+<li>[ ] High contrast visibility</li>
+<li>[ ] Distributed throughout page</li>
+<li>[ ] Goal-aligned messaging</li>
+<li>[ ] Risk reversal nearby</li>
+</ul>
+<h3>Trust</h3>
+<ul>
+<li>[ ] Customer testimonials with names</li>
+<li>[ ] Specific results/numbers</li>
+<li>[ ] Social proof (count, logos)</li>
+<li>[ ] Risk reversal present</li>
+<li>[ ] Security indicators (if needed)</li>
+</ul>
+<h3>Technical</h3>
+<ul>
+<li>[ ] Mobile responsive</li>
+<li>[ ] Fast load time (&lt;3s)</li>
+<li>[ ] Form works correctly</li>
+<li>[ ] Links not broken</li>
+<li>[ ] Analytics tracking installed</li>
+</ul>
+<hr />
+<h2>Quick Reference: Conversion Killers</h2>
+<p><strong>Avoid These:</strong><br />
+1. Generic headlines ("Welcome to our site")<br />
+2. Weak CTAs ("Submit", "Click here")<br />
+3. No visible trust signals<br />
+4. Walls of unformatted text<br />
+5. Multiple competing goals<br />
+6. Slow page load<br />
+7. Forms with too many fields<br />
+8. No risk reversal<br />
+9. Mobile-unfriendly design<br />
+10. Navigation that distracts from goal</p>`, "blog-post-template.md": `<h1>Aiquire Blog Post Template</h1>
+<p>Use this template for all Aiquire blog posts. The structure is proven to work for both educational content and thought leadership, combining scannability with depth.</p>
+<p><strong>Tone reminder</strong>: Direct, credible, results-focused. Call out what's actually true in AI. Use British English. Always connect to business outcomes.</p>
+<hr />
+<h2>Front Matter (SEO &amp; Publishing)</h2>
+<pre><code>Title: [Primary Keyword] — [Benefit/Promise]
+Slug: /blog/[primary-keyword-phrase]
+Meta Title: [50–60 chars, include primary keyword]
+Meta Description: [150–160 chars, include keyword + CTA]
+Primary Keyword: [main keyword to rank for]
+Secondary Keywords: [3–5 related terms]
+Word Count Target: [1,500–2,500 words]
+Publication Date: [Date]
+Author: [Name]
+Reading Time: [X min]
+Featured Image: [path/to/image.jpg]
+Image Alt Text: [descriptive, include keyword naturally]
+Category: [AI Strategy / ML Development / Gen AI / Industry Insights / How-To]
+Internal Links: [3–5 key pages to link to]
+</code></pre>
+<hr />
+<h2>Article Structure</h2>
+<h3>1. OPENING (150–200 words)</h3>
+<p><strong>Purpose</strong>: Hook the reader. Establish the problem. Promise the solution.</p>
+<p><strong>Opening Hook</strong> (2–3 sentences):<br />
+- Start with a provocative statement, surprising statistic, or bold claim<br />
+- This is NOT the time for hedging — be direct<br />
+- Examples:<br />
+  - "85% of AI projects never reach production. Not because of bad technology, but because the wrong problem was chosen."<br />
+  - "Most AI vendors will show you an impressive demo. We care more about what happens six months later."<br />
+  - "Your AI budget is being wasted on the wrong metrics."</p>
+<p><strong>Problem Statement</strong> (2–3 sentences):<br />
+- What challenge is the reader facing?<br />
+- Why should they care?<br />
+- What's costing them money/time?<br />
+- Example: "When you're evaluating AI vendors, the conversation inevitably becomes about features and pricing. But the real question nobody asks is: will this actually reach production? Because if it doesn't, the features don't matter."</p>
+<p><strong>The Promise</strong> (1–2 sentences):<br />
+- What will this article teach them?<br />
+- What will they be able to do after reading?<br />
+- Example: "In this article, we'll show you the five questions to ask any AI vendor before signing. By the end, you'll know exactly which ones are optimising for demos versus production systems."</p>
+<p><strong>Primary Keyword Placement</strong>: Must appear in first 100 words — naturally worked into one of the above sections.</p>
+<hr />
+<h3>2. CONTEXT / WHY THIS MATTERS (200–250 words)</h3>
+<p><strong>Purpose</strong>: Establish credibility. Show you understand the landscape. Back claims with data.</p>
+<p><strong>What to include</strong>:<br />
+- Industry data or research that supports the problem<br />
+- Aiquire's track record (if relevant): 40+ production systems, 3.2x ROI, 92% retention<br />
+- A specific example or case study setup<br />
+- What's at stake if the reader doesn't solve this</p>
+<p><strong>Tone</strong>: Authoritative but conversational. You've seen this pattern before — show it.</p>
+<p><strong>Example</strong>:<br />
+"We've delivered 40+ AI projects to production. The ones that shipped fastest and delivered measurable ROI shared something in common: they started with business problems, not technology specs.</p>
+<p>The ones that stalled? They started with 'we want to use AI' and worked backwards.</p>
+<p>McKinsey research consistently shows 80%+ of enterprise AI projects never reach production. Not because the technology is hard. Because the organisations solving the wrong problem at the wrong scale for the wrong reasons."</p>
+<hr />
+<h3>3. MAIN CONTENT (800–1,200 words)</h3>
+<p>Break into 3–5 main sections. Each section should:<br />
+- Be 200–350 words<br />
+- Have a clear, specific H2 heading (include keyword variation where natural)<br />
+- Include concrete examples, data, or walkthrough steps<br />
+- Build logically toward the conclusion</p>
+<p><strong>Structure options</strong>:</p>
+<p><strong>Option A: Step-by-Step How-To</strong></p>
+<pre><code>## [H2: How to [achieve outcome] — Step 1]
+[200-300 words explaining step 1, with example]
+
+## [H2: Step 2: [specific action]]
+[200-300 words with example or data]
+
+## [H2: Step 3: [specific action]]
+[200-300 words with example or data]
+
+[Continue with 2–4 more steps as needed]
+</code></pre>
+<p><strong>Option B: Problem-Pattern-Solution</strong></p>
+<pre><code>## [H2: The Pattern That Leads to Failure]
+[Specific, data-backed explanation of why AI projects fail this way]
+[Real example from case study]
+
+## [H2: Why This Happens]
+[Root cause analysis — organisational, technical, or process-based]
+
+## [H2: How to Fix It]
+[Actionable approach, methodology, or framework]
+
+## [H2: What Success Looks Like]
+[Case study results showing the outcome when done right]
+</code></pre>
+<p><strong>Option C: Industry / Concept Breakdown</strong></p>
+<pre><code>## [H2: What [Concept] Actually Is]
+[Clear definition, no jargon or with jargon clearly explained]
+
+## [H2: Why It Matters]
+[Business impact — connect technology to outcomes]
+
+## [H2: Common Mistakes]
+[What companies get wrong]
+
+## [H2: How to Get It Right]
+[Practical framework or approach]
+
+## [H2: Examples in Practice]
+[Real-world applications across industries]
+</code></pre>
+<p><strong>Content Guidelines for Each Section</strong>:<br />
+- <strong>Lead with the insight</strong>: Don't build up to it. Put the key point in the first sentence.<br />
+- <strong>Use bold</strong> for key concepts or memorable phrases<br />
+- <strong>Include examples</strong>: Real scenarios, not abstract theory<br />
+- <strong>Data &gt; opinion</strong>: Back claims with numbers, research, or Aiquire's track record<br />
+- <strong>Avoid fluff</strong>: Every sentence should move the reader closer to understanding or action<br />
+- <strong>Subheadings welcome</strong>: If a section hits 300+ words, break it with an H3</p>
+<p><strong>Formatting Techniques</strong> (use these liberally):<br />
+- Bullet points for multiple items (max 5–7 per list)<br />
+- Code blocks if demonstrating technical concepts<br />
+- Blockquotes for emphasis or to highlight a key insight<br />
+- Tables for comparisons or data organisation<br />
+- Em dashes — for asides or emphasis<br />
+- Numbered lists for sequential steps</p>
+<hr />
+<h3>4. TRANSITION TO APPLICATION (150–200 words)</h3>
+<p><strong>Purpose</strong>: Bridge from "here's what's true" to "here's what this means for you."</p>
+<p><strong>What to include</strong>:<br />
+- Reflection on what you've just explained<br />
+- Why this matters specifically for Aiquire's audience (C-suite, CTOs, ops leaders)<br />
+- A subtle setup for the CTA — "If you're facing this problem..."</p>
+<p><strong>Tone</strong>: Still conversational, but starting to gesture toward the call-to-action.</p>
+<p><strong>Example</strong>:<br />
+"So here's what we've learned from 40+ production systems: the organisations that get AI right don't start with technology. They start with honesty about what problem they're solving and who it's for. They bring consultants in to push back on assumptions, not just validate them.</p>
+<p>If your organisation is at the stage where you're evaluating AI opportunities but want to make sure you're not solving for the wrong thing — that's exactly when an AI strategy engagement makes sense."</p>
+<hr />
+<h3>5. CALL-TO-ACTION (50–100 words)</h3>
+<p><strong>Purpose</strong>: Move interested readers toward the next step. Multiple CTA options depending on content type.</p>
+<p><strong>CTA Options</strong>:</p>
+<p><strong>Option A: Discovery Call</strong> (for educational/strategic content)<br />
+- "If you're figuring out where AI belongs in your business, a free discovery call is the fastest way to move from uncertainty to a clear roadmap. 45 minutes, no sales pitch — just honest advice on what AI can actually do for you."<br />
+- <strong>Link</strong>: https://aiquire.siprahub.com/contact</p>
+<p><strong>Option B: Free Audit</strong> (for diagnosis/assessment content)<br />
+- "Want to see where AI could be saving your team hours every week? Get a free AI Workflow Audit. We'll identify your highest-value opportunities and show you exactly where to start."<br />
+- <strong>Link</strong>: https://aiquire.siprahub.com/audit</p>
+<p><strong>Option C: Case Study / Service Link</strong> (for capability-focused content)<br />
+- "See how we handled a similar challenge [case study link]. Or dive deeper into our [service] offering."<br />
+- <strong>Link</strong>: https://aiquire.siprahub.com/case-studies or specific service page</p>
+<p><strong>Option D: Soft</strong> (for thought leadership / no immediate CTA push)<br />
+- "If you've seen AI projects fail for similar reasons, I'd be curious what you've learned. Feel free to reply or reach out."<br />
+- <strong>Link</strong>: https://aiquire.siprahub.com/contact</p>
+<hr />
+<h3>6. CLOSING SECTION: CURATED RESOURCES (100–150 words)</h3>
+<p><strong>Purpose</strong>: Extend the post's value. Give readers a path to go deeper. Builds topical authority.</p>
+<p><strong>What to include</strong> (choose 2–3):<br />
+- <strong>What We're Building</strong>: What's Aiquire working on related to this topic? (1–2 sentences)<br />
+- <strong>Further Reading</strong>: 3–5 curated external resources (blog posts, research, tools) with 1-line descriptions<br />
+- <strong>Related Services</strong>: Link to 1–2 Aiquire services mentioned in the post<br />
+- <strong>Related Blog Posts</strong>: Link to 2–3 other Aiquire articles readers might like</p>
+<p><strong>Format</strong>:</p>
+<pre><code>### What We're Building
+
+[1–2 sentence about relevant Aiquire project or ongoing work]
+
+### Further Reading
+
+- **[Resource Title]** — [1-line description why it's relevant]
+- **[Resource Title]** — [1-line description]
+- **[Resource Title]** — [1-line description]
+
+### Related Services
+
+- [Service Name] — [1-line what it delivers] — [link]
+- [Service Name] — [1-line what it delivers] — [link]
+</code></pre>
+<hr />
+<h2>Formatting Checklist</h2>
+<p>Before submitting for publication:</p>
+<ul>
+<li>[ ] <strong>Opening</strong>: Hooks in first sentence, establishes problem in first 100 words</li>
+<li>[ ] <strong>Primary keyword</strong>: Appears in first 100 words naturally</li>
+<li>[ ] <strong>Headings</strong>: 4–7 main H2 sections; keyword variations in 2–3 of them</li>
+<li>[ ] <strong>Content</strong>: 1,500–2,500 words (shorter only if structure demands it)</li>
+<li>[ ] <strong>Examples</strong>: At least 2–3 concrete examples, scenarios, or case study references</li>
+<li>[ ] <strong>Data</strong>: 3+ specific numbers/stats (with sources cited)</li>
+<li>[ ] <strong>Voice</strong>: Reads like Aiquire — direct, credible, outcome-focused</li>
+<li>[ ] <strong>British English</strong>: organisation, programme, optimise, etc.</li>
+<li>[ ] <strong>Meta title</strong>: 50–60 characters, includes primary keyword</li>
+<li>[ ] <strong>Meta description</strong>: 150–160 characters, includes keyword + CTA</li>
+<li>[ ] <strong>URL slug</strong>: 3–5 words, hyphenated, includes primary keyword</li>
+<li>[ ] <strong>Image alt text</strong>: Describes image, includes keyword naturally, ≤125 chars</li>
+<li>[ ] <strong>Internal links</strong>: 3–5 links to Aiquire service pages, case studies, or related blog posts (with descriptive anchor text)</li>
+<li>[ ] <strong>External links</strong>: 2–3 authority sources cited (with links)</li>
+<li>[ ] <strong>CTA</strong>: Clear, contextual, placed naturally before closing section</li>
+<li>[ ] <strong>Closing section</strong>: Resources or related content included</li>
+<li>[ ] <strong>No hype words</strong>: "Revolutionary", "transformative", "cutting-edge" removed</li>
+<li>[ ] <strong>Passive voice minimised</strong>: Active voice used in 80%+ of sentences</li>
+<li>[ ] <strong>Quality</strong>: Provides genuine insight; not just keyword-stuffed</li>
+</ul>
+<hr />
+<h2>Word Count Targets by Content Type</h2>
+<table>
+<thead>
+<tr>
+<th>Content Type</th>
+<th>Word Count</th>
+<th>Structure</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>How-To Guide</td>
+<td>1,800–2,500</td>
+<td>Opening + 5–7 step sections + resources</td>
+</tr>
+<tr>
+<td>Thought Leadership</td>
+<td>1,500–2,000</td>
+<td>Opening + 3–4 analysis sections + resources</td>
+</tr>
+<tr>
+<td>Concept Explainer</td>
+<td>1,200–1,800</td>
+<td>Opening + definition + applications + resources</td>
+</tr>
+<tr>
+<td>Case Study Article</td>
+<td>1,500–2,200</td>
+<td>Opening + challenge + solution + results + resources</td>
+</tr>
+<tr>
+<td>Industry Insight</td>
+<td>1,400–2,000</td>
+<td>Opening + 3–4 insight sections + resources</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Publication Checklist</h2>
+<ul>
+<li>[ ] SEO elements finalised (title, meta, slug, keyword, alt text)</li>
+<li>[ ] Internal links configured (verify all URLs working)</li>
+<li>[ ] External links verified (no broken links)</li>
+<li>[ ] Featured image uploaded and optimised</li>
+<li>[ ] Author bio/byline added</li>
+<li>[ ] Reading time calculated</li>
+<li>[ ] Related posts linked in CMS</li>
+<li>[ ] CTA button styled and tested</li>
+<li>[ ] Spelling/grammar checked (British English)</li>
+<li>[ ] Submitted to review: [Editor Name]</li>
+</ul>
+<hr />
+<p><strong>Remember</strong>: The best Aiquire blog posts teach something valuable, prove Aiquire's expertise, and make readers feel understood — not sold to. The CTA should feel like a natural next step, not an interruption.</p>`};
+
+function openFile(slug) {
+  const viewer = document.getElementById('viewer');
+  document.getElementById('viewer-title').textContent = slug;
+  document.getElementById('viewer-content').innerHTML = contents[slug] || '<p>Content not found.</p>';
+  viewer.classList.add('open');
+  viewer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.file-card').forEach(c => c.classList.remove('active'));
+  document.querySelector(`[data-slug="${slug}"]`)?.classList.add('active');
+}
+
+function closeViewer() {
+  document.getElementById('viewer').classList.remove('open');
+  document.querySelectorAll('.file-card').forEach(c => c.classList.remove('active'));
+}
+</script>
+</body>
+</html>

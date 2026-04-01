@@ -1,23 +1,19 @@
-# [YOUR COMPANY] Writing Examples
+# Aiquire Writing Examples
 
-<!-- INSTRUCTIONS: This file should contain 3-5 exemplary blog posts that demonstrate your brand voice,
-     style, and quality standards. These examples help Claude understand how to write in your voice.
+This file should contain 3–5 exemplary blog posts that demonstrate Aiquire's brand voice, style, and quality standards. These examples help the AI understand how to write in Aiquire's voice.
 
-     Copy and paste complete articles from your blog that represent your best work.
-     See examples/castos/writing-examples.md for a real-world example with 5 full articles.
+**Brand voice summary**: Direct, credible, outcome-focused. Call out AI hype. Lead with business results. Use British English. Always connect technology to ROI.
 
-     Delete these instruction comments when done. -->
+---
 
-This file contains exemplary blog posts from [YOUR COMPANY] that demonstrate the brand voice, style, and quality standards. Use these as reference when writing new content.
+## How to Add Examples
 
-## Instructions for Adding Examples
-
-Add 3-5 complete blog post examples from your blog that represent:
-1. The ideal brand voice and tone
-2. Strong SEO optimization
-3. High-quality, valuable content
+Add 3–5 complete blog post examples from https://aiquire.siprahub.com/blog that represent:
+1. The ideal brand voice and tone (direct, results-focused, honest)
+2. Strong SEO optimisation
+3. High-quality, valuable content for business decision-makers
 4. Proper structure and formatting
-5. Effective use of examples and data
+5. Effective use of case study data and real metrics
 
 For each example, include:
 - **URL**: Link to the original post
@@ -25,130 +21,112 @@ For each example, include:
 - **Primary Keyword**: Target keyword for that article
 - **Word Count**: Approximate length
 - **Publication Date**: When it was published
-- **What Makes It Great**: 2-3 specific reasons this is an exemplary post
-- **Full Content**: The complete article text (at least 1,500+ words)
+- **What Makes It Great**: 2–3 specific reasons this is exemplary
+- **Full Content**: The complete article text
 
 ---
 
-## Example 1: [ARTICLE TITLE]
+## Current Blog Posts (Add Full Content Below)
 
-**URL**: [https://yoursite.com/article-url/]
-**Primary Keyword**: [target keyword phrase]
-**Word Count**: [~X,XXX words]
-**Publication Date**: [Month Day, Year]
+The following posts exist on the Aiquire blog. Copy and paste their full content into this file:
 
-**What Makes It Great**:
-- [Reason 1: e.g., "Thorough explanation of complex topic with clear examples"]
-- [Reason 2: e.g., "Perfect balance of expertise and accessibility"]
-- [Reason 3: e.g., "Strong internal linking and clear CTAs"]
-
-**Full Content**:
-```
-[PASTE YOUR COMPLETE ARTICLE TEXT HERE]
-
-Include:
-- Full introduction
-- All main sections with subheadings
-- Examples, data, quotes
-- Lists and formatting
-- Conclusion and CTA
-
-This should be at least 1,500+ words to give Claude enough content
-to understand your writing style, voice, and structure.
-```
+1. **What is MLOps** — https://aiquire.siprahub.com/blog/what-is-mlops
+2. **AI vs Machine Learning vs Deep Learning** — https://aiquire.siprahub.com/blog/ai-vs-machine-learning-vs-deep-learning
+3. **What is Generative AI** — https://aiquire.siprahub.com/blog/what-is-generative-ai
+4. **AI Development Process Explained** — https://aiquire.siprahub.com/blog/ai-development-process-explained
+5. **How AI is Transforming Businesses** — https://aiquire.siprahub.com/blog/how-ai-is-transforming-businesses
 
 ---
 
-## Example 2: [ARTICLE TITLE]
+## Voice Reference: What Excellent Aiquire Content Looks Like
 
-**URL**: [https://yoursite.com/article-url/]
-**Primary Keyword**: [target keyword phrase]
-**Word Count**: [~X,XXX words]
-**Publication Date**: [Month Day, Year]
+Until full blog posts are added, use these voice examples to calibrate tone:
 
-**What Makes It Great**:
-- [Reason 1]
-- [Reason 2]
-- [Reason 3]
+### Example Opening (Hook Style) ✅
 
-**Full Content**:
-```
-[PASTE COMPLETE ARTICLE TEXT HERE]
-```
+"85% of AI pilots never reach production.
 
----
+That's not a technology problem. The technology works. The problem is almost always the same: the wrong problem was chosen to solve.
 
-## Example 3: [ARTICLE TITLE]
+Before we write a single line of code, our consulting team spends weeks asking harder questions than most AI vendors are willing to ask. Questions like: Where does your team waste the most time? What manual process creates the most downstream rework? What would a 30% reduction in [specific metric] actually mean for your P&L?
 
-**URL**: [https://yoursite.com/article-url/]
-**Primary Keyword**: [target keyword phrase]
-**Word Count**: [~X,XXX words]
-**Publication Date**: [Month Day, Year]
+That's the intelligence gap — and closing it is the only thing that turns an AI pilot into a production system."
 
-**What Makes It Great**:
-- [Reason 1]
-- [Reason 2]
-- [Reason 3]
-
-**Full Content**:
-```
-[PASTE COMPLETE ARTICLE TEXT HERE]
-```
+**Why it works**:
+- Opens with a specific, provocative statistic
+- Immediately challenges the assumption (tech isn't the problem)
+- Shows Aiquire's methodology without pitching
+- Uses specific metric example (30% reduction)
+- "Intelligence gap" ties back to brand language
 
 ---
 
-## Example 4: [ARTICLE TITLE] (Optional but Recommended)
+### Example Case Study Paragraph ✅
 
-**URL**: [https://yoursite.com/article-url/]
-**Primary Keyword**: [target keyword phrase]
-**Word Count**: [~X,XXX words]
-**Publication Date**: [Month Day, Year]
+"When an insurance company came to us with a customer service problem, they wanted a chatbot.
 
-**What Makes It Great**:
-- [Reason 1]
-- [Reason 2]
-- [Reason 3]
+We pushed back.
 
-**Full Content**:
-```
-[PASTE COMPLETE ARTICLE TEXT HERE]
-```
+After two weeks of stakeholder interviews and process mapping, we found the real bottleneck: experienced agents spent 40% of every call searching for the right answer, losing confidence, and extending resolution time. The problem wasn't the front-end interface — it was the decision support layer.
 
----
+We built a real-time AI co-pilot that analyses customer intent and sentiment as the conversation unfolds, surfaces the most relevant knowledge base articles and suggested responses, and flags calls requiring escalation. No chatbot. Just a smarter agent.
 
-## Example 5: [ARTICLE TITLE] (Optional but Recommended)
+Resolution time dropped 30%. Customer satisfaction improved 45%. New agent training costs halved — because agents ramp faster when they have AI support from day one."
 
-**URL**: [https://yoursite.com/article-url/]
-**Primary Keyword**: [target keyword phrase]
-**Word Count**: [~X,XXX words]
-**Publication Date**: [Month Day, Year]
-
-**What Makes It Great**:
-- [Reason 1]
-- [Reason 2]
-- [Reason 3]
-
-**Full Content**:
-```
-[PASTE COMPLETE ARTICLE TEXT HERE]
-```
+**Why it works**:
+- Narrative structure: problem → challenge → discovery → solution → results
+- Numbers are specific and believable
+- Shows the consulting process, not just the technical solution
+- "We pushed back" demonstrates the candid advisor positioning
+- Results presented in business terms (not technical metrics)
 
 ---
 
-## Tips for Selecting Good Examples
+### Example Technical Explanation ✅
 
-1. **Diverse Topics**: Choose articles covering different aspects of your business/industry
-2. **Different Formats**: Include how-to guides, listicles, thought leadership, etc.
-3. **High Performers**: Pick articles that rank well or get good engagement
-4. **Representative**: Choose posts that truly reflect your desired voice and quality
-5. **Recent**: Prefer newer articles that reflect your current brand voice
+"MLOps — machine learning operations — is the discipline that keeps your AI investments performing after launch.
 
-## Quick Start
+Most teams know what it means to deploy a model. Few account for what happens six months later.
 
-If you don't have published blog content yet, you can:
-1. Write 1-2 sample articles in your desired voice
-2. Include competitor articles you admire (clearly labeled)
-3. Add these as you publish new content
-4. Reference industry-standard examples with your voice notes
+Data distributions shift. Customer behaviour changes. The patterns your model learned in training stop reflecting the real world. This is called model drift — and it happens silently, without error messages, without alerts, until your AI recommendations are so degraded they're causing more harm than good.
 
-**Remember**: The more complete and representative your examples, the better Claude will understand and replicate your writing style.
+MLOps is the answer. Specifically: automated monitoring that tracks model performance against agreed KPIs; drift detection that flags when the gap between expected and actual outputs exceeds a threshold; and retraining pipelines that update the model on fresh data before performance visibly degrades.
+
+The companies that get this right treat deployed models like production software — with CI/CD, version control, and SLAs. The companies that don't are running on borrowed time."
+
+**Why it works**:
+- Defines the term plainly in first sentence
+- Immediately connects to business consequence (not technical jargon)
+- "Model drift" explained clearly for non-technical audience
+- Specific technical solutions listed without being overwhelming
+- Final sentence creates urgency without fearmongering
+
+---
+
+### Example to Avoid ❌
+
+"Artificial intelligence is revolutionizing the business landscape in unprecedented ways. As organizations increasingly leverage cutting-edge AI technologies to transform their operations, it becomes crucial to understand how these innovative solutions can drive meaningful value across various industry verticals.
+
+At Aiquire, we are committed to delivering state-of-the-art AI solutions that help our clients achieve their strategic objectives through the synergistic application of machine learning, natural language processing, and other advanced AI methodologies."
+
+**Why it fails**:
+- "Revolutionizing", "unprecedented", "cutting-edge", "synergistic" — pure buzzwords
+- No specific claim, no metric, no actual insight
+- Corporate-speak with zero personality
+- Could have been written by any AI company
+- Passive, vague — no reader will trust this
+
+---
+
+## Priority: Add Full Articles
+
+To activate this file fully, paste complete articles from https://aiquire.siprahub.com/blog into this document. The more complete and representative the examples, the better the AI understands and replicates Aiquire's writing style.
+
+**Ideal mix of examples**:
+1. Educational/TOFU (e.g., "What is MLOps") — shows how to explain AI concepts for non-technical readers
+2. Thought leadership (e.g., "Why AI projects fail") — shows opinionated, data-backed analysis
+3. Industry-specific (e.g., healthcare or insurance AI) — shows how to write with domain authority
+4. Service-adjacent (e.g., "Custom ML vs off-the-shelf AI") — shows commercial angle with editorial honesty
+5. Case study narrative — shows how to tell client success stories with metrics
+
+**Remember**: Choose posts that truly reflect Aiquire's voice — direct, credible, honest, outcome-focused, written in British English.

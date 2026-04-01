@@ -197,11 +197,28 @@ Word Count: [actual word count]
 
 ## File Management
 After completing the article, automatically save to:
-- **File Location**: `drafts/[topic-slug]-[YYYY-MM-DD].md`
-- **File Format**: Markdown with frontmatter and formatted content
-- **Naming Convention**: Use lowercase, hyphenated topic slug and current date
+- **File Location**: `output/[clean-title-slug].md`
+- **File Format**: Markdown with required frontmatter and full article body
+- **Naming Convention**: Use a clean lowercase hyphenated slug from the generated article title
 
-Example: `drafts/content-marketing-strategies-2025-10-15.md`
+Example: `output/how-ai-is-transforming-business-workflows-2026.md`
+
+### Mandatory Save Protocol (Required Every `/write` Run)
+1. Generate the complete article.
+2. Create a clean slug filename from the final article title.
+3. Physically save the file in `output/` using `.md`.
+4. Use this exact Markdown structure:
+```
+---
+title: "<generated title>"
+date: "<today's date>"
+---
+
+<full article content>
+```
+5. After saving successfully, output exactly:
+`[SAVED] /output/<filename>.md`
+6. If the file is not saved to `output/`, the task is failed.
 
 ## Automatic Content Scrubbing
 
@@ -230,8 +247,8 @@ The scrubber will display statistics:
 
 ### Example Workflow
 ```
-1. Write article → Save to drafts/article-name-2025-10-31.md
-2. IMMEDIATELY run: /scrub drafts/article-name-2025-10-31.md
+1. Write article → Save to output/article-name.md
+2. IMMEDIATELY run: /scrub output/article-name.md
 3. Verify scrubbing statistics
 4. THEN proceed with optimization agents below
 ```
@@ -245,7 +262,7 @@ After saving the main article, immediately execute optimization agents:
 - **Agent**: `content-analyzer`
 - **Input**: Full article, meta elements, keywords, SERP data (if available)
 - **Output**: Comprehensive analysis covering search intent, keyword density, content length comparison, readability score, and SEO quality rating
-- **File**: `drafts/content-analysis-[topic-slug]-[YYYY-MM-DD].md`
+- **File**: `output/content-analysis-[topic-slug]-[YYYY-MM-DD].md`
 
 This new agent uses 5 specialized analysis modules:
 - Search intent analysis
@@ -258,25 +275,25 @@ This new agent uses 5 specialized analysis modules:
 - **Agent**: `seo-optimizer`
 - **Input**: Full article content
 - **Output**: SEO optimization report and suggestions
-- **File**: `drafts/seo-report-[topic-slug]-[YYYY-MM-DD].md`
+- **File**: `output/seo-report-[topic-slug]-[YYYY-MM-DD].md`
 
 ### 3. Meta Creator Agent
 - **Agent**: `meta-creator`
 - **Input**: Article content and primary keyword
 - **Output**: Multiple meta title/description options
-- **File**: `drafts/meta-options-[topic-slug]-[YYYY-MM-DD].md`
+- **File**: `output/meta-options-[topic-slug]-[YYYY-MM-DD].md`
 
 ### 4. Internal Linker Agent
 - **Agent**: `internal-linker`
 - **Input**: Article content
 - **Output**: Specific internal linking recommendations
-- **File**: `drafts/link-suggestions-[topic-slug]-[YYYY-MM-DD].md`
+- **File**: `output/link-suggestions-[topic-slug]-[YYYY-MM-DD].md`
 
 ### 5. Keyword Mapper Agent
 - **Agent**: `keyword-mapper`
 - **Input**: Article and target keywords
 - **Output**: Keyword placement analysis and improvements
-- **File**: `drafts/keyword-analysis-[topic-slug]-[YYYY-MM-DD].md`
+- **File**: `output/keyword-analysis-[topic-slug]-[YYYY-MM-DD].md`
 
 ## Automatic Quality Loop
 
@@ -285,7 +302,7 @@ After saving the initial draft, automatically run the content quality scorer:
 ### Step 1: Score Content
 Run the content scorer to evaluate the draft:
 ```bash
-python data_sources/modules/content_scorer.py drafts/[article-file].md
+python data_sources/modules/content_scorer.py output/[article-file].md
 ```
 
 ### Step 2: Evaluate Score
@@ -307,7 +324,7 @@ If composite score < 70:
 4. Repeat once more if still below threshold
 
 ### Step 4: Route Based on Final Score
-- **Score ≥ 70**: Save to `drafts/` and proceed to optimization agents
+- **Score ≥ 70**: Save to `output/` and proceed to optimization agents
 - **Score < 70 after 2 iterations**: Save to `review-required/` with a `_REVIEW_NOTES.md` file containing the scoring details and remaining issues
 
 ### Review-Required Folder

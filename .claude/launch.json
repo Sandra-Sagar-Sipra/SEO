@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "aiquire-preview",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["preview.py"],
+      "port": 8766
+    }
+  ]
+}

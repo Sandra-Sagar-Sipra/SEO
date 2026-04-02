@@ -1,0 +1,79 @@
+{
+  "brand": "siprahub",
+  "slides": [
+    {
+      "title": "AI in business workflows: where the real ROI actually hides",
+      "points": [
+        "Most teams automate the noisiest process first ― budget spent, P&L unchanged six months later",
+        "The real questions: which workflow first, how to build for production, how to measure ROI before you commit",
+        "This deck: high-value opportunities, common failure patterns, what production-grade looks like",
+        "Start with a structured view of opportunities: a free AI workflow audit before any build commitment"
+      ]
+    },
+    {
+      "title": "What \"AI in business workflows\" actually means",
+      "points": [
+        "Classic automation (RPA, rules) is fast until exceptions appear ― then it breaks",
+        "AI handles variability: NLP, ML anomaly detection, RAG for drafts ― without rigid rulebooks",
+        "Use AI where decisions matter: classification, routing, risk flagging, forecasting ― not simple field updates",
+        "That distinction tells you what to evaluate with AI vs what cheaper automation should own"
+      ]
+    },
+    {
+      "title": "Where AI in business workflows creates real ROI",
+      "points": [
+        "Best bets: high-volume decisions, measurable outcomes, meaningful cost of errors",
+        "Finance: ML on invoices often cuts manual review 60–80%; stronger controls and DPO impact",
+        "Customer operations: triage, co-pilots ― insurance case: −30% resolution time, +45% satisfaction, half the training cost",
+        "Operations: predictive maintenance and demand forecasting ― runs without a permanent data science bench"
+      ]
+    },
+    {
+      "title": "Why most workflow AI projects fail before they ship",
+      "points": [
+        "McKinsey: fewer than 30% of organisations report measurable AI value at scale ― failure is rarely the model alone",
+        "Wrong problem: annoying work automated, not consequential work",
+        "Data immaturity: fragmented, inconsistent sources undermine reliability in production",
+        "No adoption: parallel manual processes return; POC never meets integration, drift, retraining reality",
+        "Double Diamond start: most failures are prioritisation and planning ― not algorithm quality"
+      ]
+    },
+    {
+      "title": "How to identify which workflows to automate first",
+      "points": [
+        "1) Where is time spent on intelligence-heavy, low-creativity tasks?",
+        "2) Where do manual errors cascade into cash, churn, or compliance risk?",
+        "3) Where can you measure cycle time, errors, or cost per transaction for a real business case?",
+        "Case: logistics ― exception handling (five systems, four hours each, 300/month) beat delay emails by 1,050 hours/month saved when sequenced right"
+      ]
+    },
+    {
+      "title": "What production-grade implementation looks like",
+      "points": [
+        "Production = live data, auditable outputs, monitored accuracy, retraining when distributions shift ― not a demo dataset",
+        "Integrate to ERP, CRM, HRMS, ticketing; define governance and human escalation thresholds",
+        "Dashboards the business reads; plan for drift and pipeline retraining; embed in daily tools",
+        "MLOps and engineering close the gap from stalled POC to reliable production operations"
+      ]
+    },
+    {
+      "title": "How to model AI workflow ROI before you build",
+      "points": [
+        "Baseline: time, headcount, loaded cost, monthly volume of the workflow today",
+        "Estimate assisted state with conservative cycle-time improvement (e.g. 50% documents, 30% decision-support)",
+        "Multiply savings × volume × cost; add error-reduction value if quantified",
+        "Payback under 12 months on conservative assumptions ― pursue; else revisit scope or sequencing",
+        "Gartner: strong AI ROI outcomes correlate with structured pre-build business case modelling"
+      ]
+    },
+    {
+      "title": "The bottom line & next steps",
+      "points": [
+        "Impact comes from right workflow + production standard + adoption ― not slide decks alone",
+        "Healthcare example: referral routing −91% misroutes, three days to four hours; Phase 2 funded on proof",
+        "Remember: volume, measurability, downstream consequence ― most “model failures” are scoping failures",
+        "Next step: free AI Workflow Audit ― honest priorities, realistic build path, no commitment"
+      ]
+    }
+  ]
+}

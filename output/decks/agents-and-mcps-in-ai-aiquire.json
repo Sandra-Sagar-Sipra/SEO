@@ -1,0 +1,68 @@
+﻿{
+  "brand": "aiquire",
+  "slides": [
+    {
+      "title": "Agents and MCPs in AI: the practical map",
+      "points": [
+        "AI agents plan and act in loops, not just generate text",
+        "MCPs standardise how agents connect to tools and context",
+        "Together they make AI systems extensible, testable, and auditable",
+        "This deck covers architecture, risks, and a rollout path"
+      ]
+    },
+    {
+      "title": "What an AI Agent is (and what it isn't)",
+      "points": [
+        "Agents follow a perceive â†’ plan â†’ act â†’ observe cycle",
+        "They can choose actions, but responsibility stays with your organisation",
+        "Good agents use tools with constraints, not free-form guesses",
+        "Measure outcomes: time saved, fewer errors, higher throughput"
+      ]
+    },
+    {
+      "title": "What MCP is: Model Context Protocol",
+      "points": [
+        "MCP is a standard to connect models to tools and data sources",
+        "It separates the client/agent from the context/tool servers",
+        "Typed interfaces reduce brittle, one-off integrations",
+        "You get consistent tool access across workflows"
+      ]
+    },
+    {
+      "title": "How agents use MCPs in production",
+      "points": [
+        "Discover: list available MCP tools and capabilities",
+        "Request: fetch only the context required for the task",
+        "Call: execute tools with validated inputs and outputs",
+        "Observe: log decisions and route exceptions for review when needed"
+      ]
+    },
+    {
+      "title": "Common failure modes (and fixes)",
+      "points": [
+        "Tool mismatch: enforce allowlists and strict schemas",
+        "Stale context: add freshness rules and explicit retrieval steps",
+        "Unsafe actions: require approvals for high-risk operations",
+        "No observability: instrument tool calls, outcomes, and drift signals"
+      ]
+    },
+    {
+      "title": "Use cases that fit MCP + agents",
+      "points": [
+        "Support agents: knowledge retrieval plus safe ticket actions",
+        "Operations agents: doc search and workflow updates across systems",
+        "Analytics agents: controlled SQL/BI queries with guardrails",
+        "Onboarding agents: policy retrieval and guided step completion"
+      ]
+    },
+    {
+      "title": "Rollout checklist: pilot to reliable value",
+      "points": [
+        "Pick one high-impact workflow with a clear before/after KPI",
+        "Define tool contracts early (schemas, limits, confidence thresholds)",
+        "Monitor from day one (tool calls, outcomes, exceptions)",
+        "Scale only when governance and adoption are working"
+      ]
+    }
+  ]
+}
